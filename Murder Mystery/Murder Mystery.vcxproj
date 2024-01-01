@@ -21,7 +21,7 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{e9d6589b-84ad-4fd9-8525-e9eb2ded8f79}</ProjectGuid>
+    <ProjectGuid>{c87a8b5c-41fc-4599-ae84-f96071d6be6e}</ProjectGuid>
     <RootNamespace>MurderMystery</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
