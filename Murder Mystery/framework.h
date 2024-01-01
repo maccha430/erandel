@@ -13,3 +13,10 @@
 #include <malloc.h>
 #include <memory.h>
 #include <tchar.h>
+
+// C++のSTLを使えるようにする
+#include <string>
+#include <vector>
+#include <list>
+#include <utility>
+#include <iostream>

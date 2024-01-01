@@ -4,6 +4,9 @@
 #include "framework.h"
 #include "Murder Mystery.h"
 
+#include "Source/DirectX/Direct3D.h"
+#include "Source/Game/GameSystem.h"
+
 #define MAX_LOADSTRING 100
 
 // グローバル変数:
@@ -42,6 +45,11 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
     MSG msg;
 
+    // ゲームシステム生成
+    GameSystem::CreateInstance();
+    // ゲームシステム初期設定
+    GAMESYS.Initialize();
+    /*
     // メイン メッセージ ループ:
     while (GetMessage(&msg, nullptr, 0, 0))
     {
@@ -51,7 +59,35 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
             DispatchMessage(&msg);
         }
     }
+    */ // ゲームループ
+    while (1)
+    {
+        if (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE))
+        {
+            //============================================
+            // ウィンドウメッセージ処理
+            //============================================
+            // 終了メッセージがきた
+            if (msg.message == WM_QUIT) {
+                break;
+            }
+            else
+            {
+                TranslateMessage(&msg);
+                DispatchMessage(&msg);
+            }
+        }
 
+        //============================================
+        // ゲームの処理を書く
+        //============================================
+        
+        GAMESYS.Execute();
+    }
+    // ゲームシステム削除
+    GameSystem::DeleteInstance();
+    // Direct3Dインスタンス削除
+    Direct3D::DeleteInstance();
     return (int) msg.wParam;
 }
 
@@ -76,7 +112,7 @@ ATOM MyRegisterClass(HINSTANCE hInstance)
     wcex.hIcon          = LoadIcon(hInstance, MAKEINTRESOURCE(IDI_MURDERMYSTERY));
     wcex.hCursor        = LoadCursor(nullptr, IDC_ARROW);
     wcex.hbrBackground  = (HBRUSH)(COLOR_WINDOW+1);
-    wcex.lpszMenuName   = MAKEINTRESOURCEW(IDC_MURDERMYSTERY);
+    wcex.lpszMenuName = NULL;// MAKEINTRESOURCEW(IDC_MURDERMYSTERY);
     wcex.lpszClassName  = szWindowClass;
     wcex.hIconSm        = LoadIcon(wcex.hInstance, MAKEINTRESOURCE(IDI_SMALL));
 
@@ -97,7 +133,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 {
    hInst = hInstance; // グローバル変数にインスタンス ハンドルを格納する
 
-   HWND hWnd = CreateWindowW(szWindowClass, szTitle, WS_OVERLAPPEDWINDOW,
+   HWND hWnd = CreateWindowW(szWindowClass, szTitle, WS_OVERLAPPEDWINDOW-WS_THICKFRAME,
       CW_USEDEFAULT, 0, CW_USEDEFAULT, 0, nullptr, nullptr, hInstance, nullptr);
 
    if (!hWnd)
@@ -105,8 +141,21 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
       return FALSE;
    }
 
+   // Direct3Dインスタンス作成
+   Direct3D::CreateInstance();
+   // Direct3D初期化
+   D3D.Initialize(hWnd, 1280, 720);
+
+   // ウィンドウのクライアントサイズを設定
+   RECT rcWnd, rcClient;
+   GetWindowRect(hWnd, &rcWnd);
+   GetClientRect(hWnd, &rcClient);
+   int newWidth = (rcWnd.right - rcWnd.left) - (rcClient.right - rcClient.left) + 1280;//横
+   int newHeight = (rcWnd.bottom - rcWnd.top) - (rcClient.bottom - rcClient.top) + 720;//縦
+   SetWindowPos(hWnd, NULL, 0, 0, newWidth, newHeight, SWP_NOMOVE | SWP_NOZORDER);
    ShowWindow(hWnd, nCmdShow);
    UpdateWindow(hWnd);
+
 
    return TRUE;
 }
