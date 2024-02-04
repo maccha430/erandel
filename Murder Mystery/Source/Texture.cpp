@@ -1,10 +1,6 @@
-#include "framework.h"
-
 #include <locale.h>
 
-#include "Direct3D.h"
-
-#include "Texture.h"
+#include "../header/define.h" 
 
 
 

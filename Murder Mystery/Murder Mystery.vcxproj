@@ -129,20 +129,59 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="framework.h" />
-    <ClInclude Include="Murder Mystery.h" />
-    <ClInclude Include="Resource.h" />
-    <ClInclude Include="Source\DirectX\Direct3D.h" />
-    <ClInclude Include="Source\DirectX\DirectX.h" />
-    <ClInclude Include="Source\DirectX\Texture.h" />
-    <ClInclude Include="Source\Game\GameSystem.h" />
-    <ClInclude Include="targetver.h" />
+    <ClInclude Include="header\anime.h" />
+    <ClInclude Include="header\back_log.h" />
+    <ClInclude Include="header\config.h" />
+    <ClInclude Include="header\config_menu.h" />
+    <ClInclude Include="header\define.h" />
+    <ClInclude Include="header\dialog.h" />
+    <ClInclude Include="header\Direct3D.h" />
+    <ClInclude Include="header\DirectX.h" />
+    <ClInclude Include="header\ending.h" />
+    <ClInclude Include="header\function.h" />
+    <ClInclude Include="header\game.h" />
+    <ClInclude Include="header\graph.h" />
+    <ClInclude Include="header\input.h" />
+    <ClInclude Include="header\menu.h" />
+    <ClInclude Include="header\mode.h" />
+    <ClInclude Include="header\page.h" />
+    <ClInclude Include="header\save.h" />
+    <ClInclude Include="header\scroll_bar.h" />
+    <ClInclude Include="header\secret.h" />
+    <ClInclude Include="header\sound.h" />
+    <ClInclude Include="header\struct.h" />
+    <ClInclude Include="header\targetver.h" />
+    <ClInclude Include="header\text.h" />
+    <ClInclude Include="header\Texture.h" />
+    <ClInclude Include="header\title.h" />
+    <ClInclude Include="header\user.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Murder Mystery.cpp" />
-    <ClCompile Include="Source\DirectX\Direct3D.cpp" />
-    <ClCompile Include="Source\DirectX\Texture.cpp" />
-    <ClCompile Include="Source\Game\GameSystem.cpp" />
+    <ClCompile Include="Source\anime.cpp" />
+    <ClCompile Include="Source\back_log.cpp" />
+    <ClCompile Include="Source\config.cpp" />
+    <ClCompile Include="Source\config_menu.cpp" />
+    <ClCompile Include="Source\dialog.cpp" />
+    <ClCompile Include="Source\Direct3D.cpp" />
+    <ClCompile Include="Source\DrawStringShadow.cpp" />
+    <ClCompile Include="Source\ending.cpp" />
+    <ClCompile Include="Source\game.cpp" />
+    <ClCompile Include="Source\graph.cpp" />
+    <ClCompile Include="Source\key.cpp" />
+    <ClCompile Include="Source\main.cpp" />
+    <ClCompile Include="Source\menu.cpp" />
+    <ClCompile Include="Source\menu_param.cpp" />
+    <ClCompile Include="Source\mouse.cpp" />
+    <ClCompile Include="Source\page.cpp" />
+    <ClCompile Include="Source\process.cpp" />
+    <ClCompile Include="Source\save.cpp" />
+    <ClCompile Include="Source\scroll_bar.cpp" />
+    <ClCompile Include="Source\secret.cpp" />
+    <ClCompile Include="Source\sound.cpp" />
+    <ClCompile Include="Source\text.cpp" />
+    <ClCompile Include="Source\Texture.cpp" />
+    <ClCompile Include="Source\title.cpp" />
+    <ClCompile Include="Source\user.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Murder Mystery.rc" />
