@@ -19,3 +19,6 @@ void SetMenuParam_Title(MenuArg_rec &MenuArg,bool SecretFlag);
 
 /*メニューパラメータセット　―ゲーム画面―*/
 void SetMenuParam_GameRight(MenuArg_rec &MenuArg);
+
+/*メニューパラメータセット　―選択肢―*/
+void SetMenuParam_Select(MenuArg_rec& MenuArg, vector<std::string> Option, int OptionCount);

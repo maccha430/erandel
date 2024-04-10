@@ -3,8 +3,8 @@
 /*-------------------
  |セリフカウント更新 |
   ------------------- */
-BackLogClass::BackLogClass(){
-	UpButtonHandle   = LoadGraph("./resource/graph/log_up.png");
+BackLogClass::BackLogClass() {
+	UpButtonHandle = LoadGraph("./resource/graph/log_up.png");
 	DownButtonHandle = LoadGraph("./resource/graph/log_down.png");
 }
 

@@ -1,3 +1,4 @@
+#define _CRT_SECURE_NO_WARNINGS
 #include"../header/define.h" 
 
 /*----------------
@@ -265,7 +266,63 @@ void TitleMenuClass::Draw(){
 		}
 	}
 }
+/*------------------------
+ | セレクトメニュークラス |
+  ------------------------*/
+  /*初期化*/
+SelectMenuClass::SelectMenuClass(MenuArg_rec& MenuArg) :MenuClass(MenuArg) {}
 
+/*描画*/
+void SelectMenuClass::Draw() {
+	//変数宣言
+	int RowWidth = 0;
+	static int FirstFlag;
+	static int FontHandle;
+	int ObjectCount = ListMax - ListMin;
+
+	//フォント関連設定
+	if (DrawFlag == 1) {
+		if (FontFamily == MENU::GOSIC) ChangeFont("ＭＳ ゴシック");
+		if (FontFamily == MENU::MINTYO) ChangeFont("ＭＳ 明朝");
+
+		if (FirstFlag == 0) {
+			FontHandle = CreateFontToHandle(NULL, FontSize, -1, DX_FONTTYPE_ANTIALIASING);
+			FirstFlag++;
+		}
+		SetFontSize(FontSize);
+	}
+
+	//メニュー描画(4つ以下の場合)
+	if (ObjectCount <= 4) {
+		for (int i = 0; i < ObjectCount; i++) {
+			if (SelectNo == i) TextColor = GetColor(255, 0, 0);
+			else				TextColor = GetColor(255, 255, 255);
+
+			if (DrawFlag == MENU::IMAGE) DrawGraph(DrawX, DrawY + (Interval + Height) * i, DrawHandle[i], TRUE);
+			if (DrawFlag == MENU::TEXT)  DrawStringShadow(DrawX, DrawY + (Interval + Height) * i, DrawText[i], TextColor, GetColor(40, 40, 40));
+		}
+	}
+	else
+	{
+		for (int i = 0; i < ObjectCount; i++) {
+			if (SelectNo == i) TextColor = GetColor(255, 0, 0);
+			else				TextColor = GetColor(40, 40, 40);
+
+			if (i % 2 == 0)
+			{
+				if (DrawFlag == MENU::IMAGE) DrawGraph(DrawX, DrawY + (Interval + Height) * i/2, DrawHandle[i], TRUE);
+				if (DrawFlag == MENU::TEXT)  DrawStringShadow(DrawX, DrawY + (Interval + Height) * i, DrawText[i], TextColor, GetColor(40, 40, 40));
+			}
+			else
+			{
+				if (DrawFlag == MENU::IMAGE) DrawGraph(DrawX+ (Interval +Width[i-1]), DrawY + (Interval + Height) * (i - 1) / 2, DrawHandle[i], TRUE);
+				if (DrawFlag == MENU::TEXT)  DrawStringShadow(DrawX + (Interval + Width[i - 1]), DrawY + (Interval + Height)*(i - 1) / 2, DrawText[i], TextColor, GetColor(40, 40, 40));
+			}
+		}
+
+
+	}
+}
 
 /*--------------------------
  | コンフィグメニュークラス |
@@ -305,7 +362,7 @@ void ConfigListClass::Draw(){
 		}else TextColor = GetColor(255,255,255);
 		//if( DrawFlag == MENU::IMAGE ) DrawGraph(  DrawX + RowWidth * i,DrawY , DrawHandle[i] , TRUE );
 		if( DrawFlag == MENU::TEXT )  DrawStringToHandle( DrawX + RowWidth * i,DrawY , DrawText[i] , TextColor , MenuFontHandle ); 
-		SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);
+		//SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);
 	}
 
 

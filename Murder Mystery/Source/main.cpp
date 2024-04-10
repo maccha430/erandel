@@ -6,7 +6,7 @@ int WINAPI WinMain(HINSTANCE hInstance,HINSTANCE hPrevInstance,LPSTR lpCmdLine,i
 	bool EndFlag = 0;
 	
 	//ウィンドウ設定
-	SetOutApplicationLogValidFlag(FALSE);			//ログを出力しない
+	SetOutApplicationLogValidFlag(TRUE);			//ログを出力しない
 	ChangeWindowMode(TRUE);							//ウィンドウモード変更
 	SetGraphMode(1280,720,32);						//ウィンドウサイズ指定
 	SetWindowText("夜空の贈り物 ver1.01");			//ウィンドウタイトル変更

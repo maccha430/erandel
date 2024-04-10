@@ -59,6 +59,15 @@ class TitleMenuClass : public MenuClass{
 		void Draw();
 };
 
+/*------------------------
+ | セレクトメニュークラス |
+  ------------------------*/
+class SelectMenuClass : public MenuClass {
+public:
+	SelectMenuClass(MenuArg_rec& MenuArg);
+	void Draw();
+};
+
 /*--------------------------
  | コンフィグメニュークラス |
   --------------------------*/

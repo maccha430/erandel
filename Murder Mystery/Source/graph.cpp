@@ -56,7 +56,7 @@ void SaveGraphClass::Draw(){
 
 
 /*--------------------------
- | テキストラフィッククラス |
+ | テキストグラフィッククラス |
   --------------------------*/
 /*初期化*/
 TextGraphClass::TextGraphClass(){
@@ -297,6 +297,31 @@ void ConfigGraphClass::Draw(){
 	//オブジェクト開放
 	for( int i=0 ; i<5 ; i++ ) delete Menu[i];
 }
+
+/*--------------------------------
+ | セレクトグラフィッククラス 　　|
+  --------------------------------*/
+SelectGraphClass::SelectGraphClass() {
+	Load();			//画像読み込み
+	SetPoint();		//描画座標セット
+}
+void SelectGraphClass::Load() {
+	//背景ロード
+	GameBackHandle.push_back(LoadGraph("./resource/graph/BackGround1.png"));
+	GameBackHandle.push_back(LoadGraph("./resource/graph/BackGround2.png"));
+
+
+
+}
+
+/*描画座標セット*/
+void SelectGraphClass::SetPoint() {
+	//背景
+	GameBackPoint[GRAPH::X] = 0;
+	GameBackPoint[GRAPH::Y] = 0;
+}
+
+
 
 /*--------------------------------
  | シークレットグラフィッククラス |

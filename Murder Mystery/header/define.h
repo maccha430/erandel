@@ -29,7 +29,7 @@ typedef vector< vector<int> > Dvector_i;
 typedef vector< vector<std::string> > Dvector_s;
 
 /*各種ヘッダインクルード*/
-#include"DirectX.h"
+#include<DxLib.h>
 #include"struct.h"
 #include"user.h"
 #include"mode.h"

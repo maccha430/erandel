@@ -1,4 +1,5 @@
-﻿#include"../header/define.h"
+﻿#define _CRT_SECURE_NO_WARNINGS
+#include"../header/define.h"
 
 /*メニューパラメータセット　―タイトル画面―*/
 void SetMenuParam_Title(MenuArg_rec &MenuArg,bool SecretFlag){
@@ -52,6 +53,29 @@ void SetMenuParam_GameRight(MenuArg_rec &MenuArg){
 	}
 
 	MenuArg.TextColor  = GetColor(255,255,255);
+	MenuArg.FontFamily = MENU::GOSIC;
+
+}
+/*メニューパラメータセット　―選択肢―*/
+void SetMenuParam_Select(MenuArg_rec& MenuArg,vector<std::string> Option,int OptionCount) {
+
+	MenuArg.DrawX = 150;
+	MenuArg.DrawY = 150;
+	MenuArg.Interval = 70;
+	MenuArg.Width = 30;
+	MenuArg.Height = 30;
+	MenuArg.ListMin = 1;
+	MenuArg.ListMax = OptionCount+1;
+	MenuArg.AtherNo = 10;
+	MenuArg.AlphaNo = 50;
+	MenuArg.DrawFlag = MENU::TEXT;
+	MenuArg.DirectionFlag = MENU::COL;
+
+	for (int i = 0; i < OptionCount; i++) {
+		strcpy(MenuArg.DrawText[i],Option[i].c_str());
+	}
+
+	MenuArg.TextColor = GetColor(255, 255, 255);
 	MenuArg.FontFamily = MENU::GOSIC;
 
 }

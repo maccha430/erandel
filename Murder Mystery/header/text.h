@@ -5,18 +5,20 @@ class TextClass{
 	private:
 		//定数
 		enum{SceneMax=8,RowMax=1024};						//シーン最大数、行数最大
-		enum{NORMAL,EYECATCH,BACKLOG,NOTWINDOW,CHANGE,END,TITLE}; //描画モード定数
+		enum{NORMAL,EYECATCH,BACKLOG,NOTWINDOW,CHANGE,END,TITLE,SELECT}; //描画モード定数
 
 		int  Select;										//選択メニュー
 		int  MenuEnterFlag;									//メニュー決定フラグ 
 		int  WriteMode;									    //描画モード格納
+		int  Selected;										//選択した選択肢
 
 		short int  TextCount;								//テキストカウンタ
 		short int  SceneCount;								//シーンカウンタ
 		short int  SerifCount;								//セリフカウンタ
 
-		int  SelectFlag;									//選択肢出現フラグ
+		int  SelectCount;									//選択肢番号
 		int  SkipPermitFlag;								//スキップ許可フラグ
+		int  SelectFlag;									//選択肢作成フラグ
 		int  AutoFlag;										//オートフラグ　
 		int  TextGraphEndFlag;								//テキスト全文描画完了フラグ
 
@@ -24,6 +26,8 @@ class TextClass{
 		int LineMax[100];									//1シーンごとのテキストの総行数
 		std::string Name[64][1024];							//キャラネーム変数
 		std::string Text[64][1024];							//セリフテキスト変数
+		int OptionCount[64];								//選択肢数登録変数
+		std::vector<std::string> Option[64][2];				//選択肢変数 
 
 		//テキストメソッド
 		void InitGameCount(UserClass &User);				//ゲームカウントの初期化
@@ -36,6 +40,7 @@ class TextClass{
 		TextClass();										//初期化
 		void InitVar();										//変数初期化
 		void LoadStory();									//ストーリーロード
+		void LoadSelect();									//選択肢ロード
 		int  CutSpace(std::string &TmpText);				//テキストから全角空白を取り除く
 		void CheckText(UserClass &User);					//テキストチェック
 		std::vector<std::string> StringSplit(const std::string &Str,char Sep);		 //文字列分割
@@ -58,6 +63,10 @@ class TextClass{
 
 		//アイキャッチ関連
 		void EyeCatching(UserClass &User);					//アイキャッチ処理
+		//選択肢関連
+		void SelectWrite(UserClass& User, int OptionNumber);
+
+		
 
 		//スキップ・オート
 		void SkipFunction(UserClass &User);					//スキップ処理
@@ -84,7 +93,7 @@ class TextClass{
 		void SetGameData(UserClass &User);
 
 		//制御コードチェック
-		void CheckCotrolCode(UserClass &User);	
+		void CheckControlCode(UserClass &User);	
 		void BackCheckControlCode(UserClass &User);
 
 

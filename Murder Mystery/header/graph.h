@@ -82,6 +82,27 @@ class TextGraphClass : public GraphClass{
 		void DrawChar(UserClass &User);	//キャラクタ描画
 		void DrawWindow();				//テキストウィンドウ描画
 };
+
+/*----------------------------
+ | セレクトグラフィッククラス |
+  ----------------------------*/
+class SelectGraphClass : public TextGraphClass {
+private:
+	//画像ハンドル
+	vector<int> GameBackHandle;		//背景画像
+	//描画座標
+	int GameBackPoint[2];			//背景画像
+
+	int SelectNo;					//選択番号
+
+	//メソッド
+	void Load();
+	void SetPoint();
+
+public:
+	SelectGraphClass(); //初期化
+	
+};
 		
 /*------------------------------
  | コンフィググラフィッククラス |

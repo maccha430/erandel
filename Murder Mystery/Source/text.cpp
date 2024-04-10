@@ -1,4 +1,7 @@
+#define _CRT_SECURE_NO_WARNINGS
 #include"../header/define.h" 
+
+
 
 /*----------------
  | テキストクラス |
@@ -7,18 +10,18 @@
 TextClass::TextClass(){
 	InitVar();		//変数初期化
 	LoadStory();	//ストーリ読み込み
+	LoadSelect(); //選択肢読み込み
 }
 
 /*変数初期化*/
 void TextClass::InitVar(){
 	//メンバ変数初期化
-	SelectFlag = 1;
 	Select = -1;
+	SelectFlag = 0;
 	AutoFlag = -1;
 	TextCount = 0;
 	SceneCount = 0;
 	SerifCount = 0;
-	SelectFlag = 0;
 	WriteMode  = NORMAL;
 	TextGraphEndFlag=0;
 	memset(LineMax,0,sizeof(LineMax));
@@ -73,7 +76,7 @@ void TextClass::LoadStory(){
 			if( TmpText[0] == NULL ) continue;
 
 			//全角･半角スペースを除去
-			CutSpace(TmpText);
+		    //CutSpace(TmpText);
 
 			//TmpTextの一文字目が'\0'ならば空行と判断しスキップ
 			if( TmpText[0] == '\0' ) continue;
@@ -81,9 +84,10 @@ void TextClass::LoadStory(){
 			//TmpTextをNameとTextに分割
 			SplitTextArray = StringSplit(TmpText,':');
 
+
 			//分割された文字列をNameとTextに代入
-			Name[Scene][Count] = SplitTextArray[NAME];
-			Text[Scene][Count] = SplitTextArray[TEXT];
+			Name[Scene][Count].swap(SplitTextArray[NAME]);
+			Text[Scene][Count].swap(SplitTextArray[TEXT]);
 
 			//Nameが"コメント"ならコメントと判断しスキップ
 			if( Name[Scene][Count] == "コメント" ) continue;
@@ -118,6 +122,85 @@ void TextClass::LoadStory(){
 
 	}
 	
+}
+
+/*選択肢のロード*/
+void TextClass::LoadSelect() {
+	//真の変数
+	int							FileHandle;			//ファイルハンドル
+	char						TmpBuf[128];		//テキスト取得用一時変数
+	char						FileName[64];		//ファイル名格納
+	std::string					TmpText;			//テキスト取得後操作用一時オブジェクト 
+	std::vector<std::string>	SplitTextArray;		//分割された文字を格納する配列
+
+	//カウンタ
+	int	Count = 0;									//カウンタ
+	int	Scene = 0;									//シーンカウンタ
+
+	//行数管理
+	int SerifNo = -1;								//セリフのナンバーを格納(最初は必ず加算されるので、初期値は負の数にしておく)
+
+	//定数
+	const int LoadTextLen = 128;					//読み込むテキストの文字数
+	const int OPTION = 0;						//分割された文字列を格納する配列に関するもの
+	const int NEXT = 1;						//分割された文字列を格納する配列に関するもの
+
+
+
+	//ファイル名を取得
+	sprintf(FileName, "./resource/story/erandel select.txt");
+
+	//ファイルオープン
+	FileHandle = FileRead_open(FileName);
+
+	//ファイル終端までループ
+	while (FileRead_eof(FileHandle) == 0) {
+		//ファイルから一行取得
+		FileRead_gets(TmpBuf, LoadTextLen, FileHandle);
+
+		//一文字目が '\0' なら空行と判断しスキップ
+		if (TmpBuf[0] == '\0') continue;
+
+		//char型配列のTmpBufをStringオブジェクトのTmpTextに変換
+		TmpText = TmpBuf;
+
+		//TmpTextの一文字目が'\0'ならば空行と判断しスキップ
+		if (TmpText[0] == NULL) continue;
+
+		//全角･半角スペースを除去
+		//CutSpace(TmpText);
+
+		//TmpTextの一文字目が'\0'ならば空行と判断しスキップ
+		if (TmpText[0] == '\0') continue;
+
+		//TmpTextを選択肢数と選択肢に分割
+		SplitTextArray = StringSplit(TmpText, ':');
+
+
+		//分割された文字列をNameとTextに代入
+		OptionCount[Count] = stoi(SplitTextArray[0]);
+		TmpText = SplitTextArray[1];
+		SplitTextArray = StringSplit(TmpText, ',');
+		for (int i = 0; i < SplitTextArray.size() - 1; ++i)
+		{
+			Option[Count][OPTION].push_back(SplitTextArray[i]);
+			++i;
+			Option[Count][NEXT].push_back(SplitTextArray[i]);
+		}
+
+
+
+
+
+		//カウントを進める
+		Count++;
+	}
+
+
+
+	//カウント初期化
+	Count = 0;
+
 }
 
 /*文字列分割*/
@@ -183,6 +266,8 @@ void TextClass::Main(UserClass &User){
 	SetMenuParam_GameRight(MenuRightParam);
 	static MenuClass GameRightMenu(MenuRightParam);
 
+	
+
 	//定数
 	const int OtherSelect = 6;
 
@@ -194,7 +279,7 @@ void TextClass::Main(UserClass &User){
 	CheckText(User);	
 
 	//制御コードチェック
-	if( WriteMode != EYECATCH ) CheckCotrolCode(User);
+	if( WriteMode != EYECATCH ) CheckControlCode(User);
 
 	//背景描画
 	Graph.DrawBack(User);
@@ -227,6 +312,7 @@ void TextClass::Main(UserClass &User){
 	if( WriteMode == NORMAL    ) NormalWrite(User);	//通常テキスト描画
 	if( WriteMode == EYECATCH  ) EyeCatching(User);	//アイキャッチ
 	if( WriteMode == BACKLOG   ) BackLogMain(User);	//バックログ
+	if (WriteMode == SELECT    ) SelectWrite(User, SelectCount);//選択肢
 	if( WriteMode == NOTWINDOW ) NotWindow();		//ウィンドウ非表示
 	if( WriteMode == END	   ) GameEnd(User);		//ゲーム終了
 
@@ -327,7 +413,6 @@ void TextClass::CheckText(UserClass &User){
 
 	//シーンの終わりなら、次のシーンへ(カウント更新)
 	if( TextCount >= LineMax[SceneCount] ){
-		SceneCount++;
 		TextCount  = 0;
 		SerifCount = 0;
 
@@ -653,6 +738,32 @@ void TextClass::AutoFunction(UserClass &User){
 	//}
 }
 
+ void TextClass::SelectWrite(UserClass& User,int OptionNumber)
+ {
+	 //メニューパラメータセット
+	 static struct MenuArg_rec SelectParam;
+	 if (SelectFlag == 0)
+	 {	 
+		 SetMenuParam_Select(SelectParam, Option[OptionNumber][0], OptionCount[OptionNumber]);
+		 SelectFlag = 1;
+	 }
+	 static SelectMenuClass GameSelectMenu(SelectParam);
+	 GameSelectMenu.Create();
+
+	 MouseClass* Mouse = MouseClass::GetInstance();
+	 Selected = GameSelectMenu.GetSelectNo();
+	 if (Mouse->GetState(MOUSE::LEFT) == TRUE) {
+		 if (Selected != 10)
+		 { 
+			 SceneCount = stoi(Option[OptionNumber][1][Selected]);
+			 TextCount = 0;
+			 SerifCount = 0;
+			 SelectFlag = 0;
+			 WriteMode = NORMAL;
+		 }
+	 }
+ }
+
 /*バックログ*/
 void TextClass::BackLogMain(UserClass &User){
 	MouseClass* Mouse = MouseClass::GetInstance();
@@ -865,13 +976,14 @@ void TextClass::SetGameData(UserClass &User){
 }
 	
 /*制御コードチェック*/
-void TextClass::CheckCotrolCode(UserClass &User){
+void TextClass::CheckControlCode(UserClass &User){
 	//各種コード受け取り変数
 	std::string BGMCode;
 	std::string BackCode;
 	std::string EventCode;
 	std::string CharacterCode;
-
+	std::string SceneCode;
+	std::string SelectCode;
 	bool EventFlag = FALSE;
 
 	do{
@@ -923,7 +1035,21 @@ void TextClass::CheckCotrolCode(UserClass &User){
 			if( EventCode == "経過"       ) OverTime(User);
 			if( EventCode == "タイトルへ" ) WriteMode = TITLE;
 		}
-	
+		//シーンチェンジ
+		if (Name[SceneCount][TextCount] == "次のシーン") {
+			SceneCode= Text[SceneCount][TextCount];
+			SceneCount = stoi(SceneCode);
+			TextCount++;
+			SerifCount++;
+			EventFlag = TRUE;
+		}
+		//選択肢
+		if (Name[SceneCount][TextCount] == "選択肢") {
+			SelectCode = Text[SceneCount][TextCount];
+			SelectCount = stoi(SelectCode);
+			WriteMode = SELECT;
+		}
+
 		//エンド
 		if( Name[SceneCount][TextCount] == "エンド" ){
 			TextCount++;
