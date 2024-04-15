@@ -3,6 +3,7 @@
   ------------------*/
 
 /*ユーザクラス*/
+
  class UserClass{
 	private:	
 		int    PageFlag;								//現在のページ
@@ -46,6 +47,15 @@
 		//キャラクタコード
 		void SetCharacterCode(int Code);
 		int  GetCharacterCode();
+
+		//キャラクタコード
+		void SetStatusCode(int Code);
+		int  GetStatusCode();
+
+		//フラグ
+		void SetFlagOn(int FlagNumber);
+		void SetFlagOff(int FlagNumber);
+		bool CheckFlag(int FlagNumber);
 
 		//シークレットフラグ
 		void SetSecretFlag();

@@ -984,6 +984,8 @@ void TextClass::CheckControlCode(UserClass &User){
 	std::string CharacterCode;
 	std::string SceneCode;
 	std::string SelectCode;
+	std::string FlagCode;
+	std::string StatusCode;
 	bool EventFlag = FALSE;
 
 	do{
@@ -1039,8 +1041,8 @@ void TextClass::CheckControlCode(UserClass &User){
 		if (Name[SceneCount][TextCount] == "次のシーン") {
 			SceneCode= Text[SceneCount][TextCount];
 			SceneCount = stoi(SceneCode);
-			TextCount++;
-			SerifCount++;
+			TextCount=0;
+			SerifCount=0;
 			EventFlag = TRUE;
 		}
 		//選択肢
@@ -1049,7 +1051,43 @@ void TextClass::CheckControlCode(UserClass &User){
 			SelectCount = stoi(SelectCode);
 			WriteMode = SELECT;
 		}
-
+		//ステータス
+		if (Name[SceneCount][TextCount] == "ステータス") {
+			StatusCode = Text[SceneCount][TextCount];
+			if (StatusCode == "力が強い") User.SetStatusCode(GAME_STATUS::STR);
+			if (StatusCode == "手先が器用")  User.SetStatusCode(GAME_STATUS::DEX);
+			if (StatusCode == "頭が良い")  User.SetStatusCode(GAME_STATUS::INT);
+			TextCount++;
+			SerifCount++;
+			EventFlag = TRUE;
+		}
+		//フラグOn.Off
+		if (Name[SceneCount][TextCount] == "フラグON") {
+			FlagCode = Text[SceneCount][TextCount];
+			User.SetFlagOn(stoi(FlagCode));
+			TextCount++;
+			SerifCount++;
+			EventFlag = TRUE;
+		}
+		if (Name[SceneCount][TextCount] == "フラグOFF") {
+			FlagCode = Text[SceneCount][TextCount];
+			User.SetFlagOff(stoi(FlagCode));
+			TextCount++;
+			SerifCount++;
+			EventFlag = TRUE;
+		}
+		//フラグチェック
+		if (Name[SceneCount][TextCount] == "フラグチェック") {
+			FlagCode = Text[SceneCount][TextCount];
+			if (User.CheckFlag(stoi(FlagCode)) == true)
+			{
+				TextCount++;
+				SerifCount++;
+			}
+			TextCount++;
+			SerifCount++;
+			EventFlag = TRUE;
+		}
 		//エンド
 		if( Name[SceneCount][TextCount] == "エンド" ){
 			TextCount++;

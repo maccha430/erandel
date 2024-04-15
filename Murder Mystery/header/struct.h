@@ -41,10 +41,12 @@ struct SaveData_rec{
 	int         BGMCode;	//BGMコード
 	int         BackCode;	//背景コード
 	int			CharCode;	//キャラクターコード
+	int         StatusCode; //ステータスコード
 	int			Year;		//年
 	int			Mon;		//月
 	int			Day;		//日
 	int         TextLength;	//テキストの文字数(バイト数)
+	bool		Flags[32];	//フラグ
 	char		Text[61];	//テキスト1行(これは100%ﾊﾞｯﾌｧｵｰﾊﾞｰﾌﾛｰの元になるから、std::stringにしておくこと！)
 };
 

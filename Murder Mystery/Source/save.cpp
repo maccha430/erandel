@@ -338,6 +338,10 @@ void SaveClass::Save(UserClass &User){
 			SaveDate[Page][Select][YEAR]    = SaveData.Year       ;
 			SaveDate[Page][Select][MON]     = SaveData.Mon	      ;
 			SaveDate[Page][Select][DAY]     = SaveData.Day		  ;
+			for (int i = 0; i < MAX_FLAG; ++i)
+			{
+				SaveFlag[Page][Select][i] = SaveData.Flags[i];
+			}
 			SaveTextLength[Page][Select][0] = SaveData.TextLength ; 
 			strcpy(SaveText[Page][Select],SaveData.Text);
 
@@ -351,10 +355,11 @@ void SaveClass::Save(UserClass &User){
 					Hash = Hash^Key;
 					Hash = Hash%Key;
 
-					fwrite(&Hash,1,sizeof(int),fp);
+					fwrite(&Hash, 1, sizeof(int), fp);
 					fwrite(SaveCount[j][i],3,sizeof(short int),fp);
 					fwrite(SaveCode[j][i],3,sizeof(int),fp);
 					fwrite(SaveDate[j][i],3,sizeof(int),fp);
+					fwrite(SaveFlag[j][i], 32, sizeof(bool), fp);
 					fwrite(SaveTextLength[j][i],1,sizeof(int),fp);
 					TextSize = (size_t)SaveTextLength[j][i][0];
 					fwrite(SaveText[j][i],1,sizeof(SaveText[j][i]),fp);
@@ -515,6 +520,10 @@ void SaveClass::Delete(UserClass &User){
 			SaveDate[Page][Select][YEAR]    = 0;
 			SaveDate[Page][Select][MON]     = 0;
 			SaveDate[Page][Select][DAY]     = 0;
+			for (int i = 0; i < MAX_FLAG; ++i)
+			{
+				SaveFlag[Page][Select][i] = false;
+			}
 			SaveTextLength[Page][Select][0] = 0; 
 			//strcpy(SaveText[Page][Select],"\0");
 			memset(SaveText[Page][Select],'\0',sizeof(SaveText[Page][Select]));
@@ -532,6 +541,7 @@ void SaveClass::Delete(UserClass &User){
 					fwrite(SaveCount[j][i],3,sizeof(short int),fp);
 					fwrite(SaveCode[j][i],3,sizeof(int),fp);
 					fwrite(SaveDate[j][i],3,sizeof(int),fp);
+					fwrite(SaveFlag[j][i], 32, sizeof(bool), fp);
 					fwrite(SaveTextLength[j][i],1,sizeof(int),fp);
 					TextSize = (size_t)SaveTextLength[j][i][0];
 					fwrite(SaveText[j][i],1,sizeof(SaveText[j][i]),fp);

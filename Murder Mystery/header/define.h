@@ -71,6 +71,9 @@ extern int TextFontHandle;
 #define windowX 1280
 #define windowY 720
 
+//フラグ数(save.h/struct.hは仕様上定数で書かれているのでフラグ数を増やす場合そこも書き換えること)
+#define MAX_FLAG 32 
+
 //メニュークラスで使う
 namespace MENU{
 	enum{IMAGE,TEXT,DATA};
@@ -131,5 +134,10 @@ namespace GAME_BACK{
 //ゲームキャラクターコード
 namespace GAME_CHAR{
 	enum{AI,NOT};
+}
+
+//ゲームステータスコード
+namespace GAME_STATUS {
+	enum {STR,DEX,INT};
 }
 

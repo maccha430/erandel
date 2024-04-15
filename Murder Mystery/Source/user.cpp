@@ -9,6 +9,8 @@ UserClass::UserClass(){
 	PageFlag			= PAGE::TITLE;
 	SaveData.SceneCount = 0;
 	SaveData.TextCount	= 0;
+	SaveData.StatusCode = -1;
+	for (int i = 0; i < MAX_FLAG; ++i) { SaveData.Flags[i] = false; }
 
 	//コンフィグデータ初期化
 
@@ -173,6 +175,26 @@ int  UserClass::GetBackCode(){return BackCode;}
 /*キャラクタコードセット･ゲット*/
 void UserClass::SetCharacterCode(int Code){ this->CharCode = Code; }
 int  UserClass::GetCharacterCode(){return CharCode;}
+
+/*ステータスコードセット･ゲット*/
+void UserClass::SetStatusCode(int Code) { this->SaveData.StatusCode = Code; }
+int  UserClass::GetStatusCode() { return this->SaveData.StatusCode; }
+/*フラグon,フラグチェック*/
+void UserClass::SetFlagOn(int FlagNumber)
+{
+	this->SaveData.Flags[FlagNumber] = true;
+}
+void UserClass::SetFlagOff(int FlagNumber)
+{
+	this->SaveData.Flags[FlagNumber] = false;
+}
+
+bool UserClass::CheckFlag(int FlagNumber)
+{
+	return this->SaveData.Flags[FlagNumber];
+}
+
+
 
 /*シークレットフラグ*/
 void UserClass::SetSecretFlag(){
