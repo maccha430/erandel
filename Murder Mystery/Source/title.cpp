@@ -95,9 +95,11 @@ void TitleClass::InitSaveData(UserClass &User){
 	SaveData.SceneCount = 0;
 	SaveData.TextCount  = 0;
 	SaveData.SerifCount = 0;
+	SaveData.StatusCode = 0;
 	SaveData.BGMCode    = GAME_BGM::STOP;
 	SaveData.BackCode   = GAME_BACK::BLACK;
 	SaveData.CharCode   = GAME_CHAR::NOT;
+	for (int i = 0; i < MAX_FLAG; ++i) { SaveData.Flags[i] = false; }
 	SaveData.Year		= 0;
 	SaveData.Mon		= 0;
 	SaveData.Day		= 0;

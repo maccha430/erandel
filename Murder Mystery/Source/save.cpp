@@ -520,6 +520,10 @@ void SaveClass::Delete(UserClass &User){
 			SaveDate[Page][Select][YEAR]    = 0;
 			SaveDate[Page][Select][MON]     = 0;
 			SaveDate[Page][Select][DAY]     = 0;
+			for (int i = 0; i < 3; ++i)
+			{
+				SaveStatus[Page][Select][i] = 0;
+			}
 			for (int i = 0; i < MAX_FLAG; ++i)
 			{
 				SaveFlag[Page][Select][i] = false;

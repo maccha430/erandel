@@ -41,7 +41,7 @@ struct SaveData_rec{
 	int         BGMCode;	//BGMコード
 	int         BackCode;	//背景コード
 	int			CharCode;	//キャラクターコード
-	int         StatusCode; //ステータスコード
+	int         StatusCode[3]; //ステータスコード
 	int			Year;		//年
 	int			Mon;		//月
 	int			Day;		//日

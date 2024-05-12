@@ -368,6 +368,55 @@ void ConfigListClass::Draw(){
 
 }
 
+/*------------------------
+ | アイテムメニュークラス |
+  ------------------------*/
+/*初期化*/
+ItemMenuClass::ItemMenuClass(MenuArg_rec& MenuArg) :MenuClass(MenuArg) {}
+
+void ItemMenuClass::Draw() {
+	//変数宣言
+	int RowWidth = 0;
+	static int FirstFlag;
+	static int FontHandle;
+
+	//フォント関連設定
+	if (DrawFlag == 1) {
+		if (FontFamily == MENU::GOSIC) ChangeFont("ＭＳ ゴシック");
+		if (FontFamily == MENU::MINTYO) ChangeFont("ＭＳ 明朝");
+
+		if (FirstFlag == 0) {
+			FontHandle = CreateFontToHandle(NULL, FontSize, -1, DX_FONTTYPE_ANTIALIASING);
+			FirstFlag++;
+		}
+		SetFontSize(FontSize);
+	}
+
+	//メニュー描画(縦並びの場合)
+	if (DirectionFlag == MENU::COL) {
+		for (int i = 0; i < ListMax - ListMin; i++) {
+			if (SelectNo == i) TextColor = GetColor(255, 0, 0);
+			else				TextColor = GetColor(40, 40, 40);
+
+			if (DrawFlag == MENU::IMAGE) DrawGraph(DrawX, DrawY + (Interval + Height) * i / 2, DrawHandle[i], TRUE);
+			if (DrawFlag == MENU::TEXT)  DrawStringShadow(DrawX, DrawY + (Interval + Height) * i, DrawText[i], TextColor, GetColor(40, 40, 40));
+		}
+	}
+
+	//メニュー描画(横並びの場合)
+	if (DirectionFlag == MENU::ROW) {
+		for (int i = 0; i < ListMax - ListMin; i++) {
+			if (SelectNo == i) TextColor = GetColor(255, 0, 0);
+			else				TextColor = GetColor(40, 40, 40);
+			for (int p = 0; p < i; p++) RowWidth = Width[p] + Interval;
+			if (DrawFlag == MENU::IMAGE) DrawGraph(DrawX + RowWidth * i, DrawY, DrawHandle[i], TRUE);
+			if (DrawFlag == MENU::TEXT)  DrawString(DrawX + RowWidth * i, DrawY, DrawText[i], TextColor);
+		}
+
+	}
+}
+
+
 
 /*----------------------------
  | シークレットメニュークラス |
@@ -423,3 +472,4 @@ void SecretMenuClass::Draw(int SetNo){
 	}
 
 }
+

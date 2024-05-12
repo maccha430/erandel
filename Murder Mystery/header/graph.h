@@ -84,12 +84,12 @@ class TextGraphClass : public GraphClass{
 };
 
 /*----------------------------
- | セレクトグラフィッククラス |
+ | アイテムグラフィッククラス |
   ----------------------------*/
-class SelectGraphClass : public TextGraphClass {
+class ItemGraphClass : public GraphClass {
 private:
 	//画像ハンドル
-	vector<int> GameBackHandle;		//背景画像
+	int BackgroundHandle;		//背景画像
 	//描画座標
 	int GameBackPoint[2];			//背景画像
 
@@ -98,9 +98,11 @@ private:
 	//メソッド
 	void Load();
 	void SetPoint();
+	
 
 public:
-	SelectGraphClass(); //初期化
+	ItemGraphClass(); //初期化
+	void Draw();	  //背景描画
 	
 };
 		

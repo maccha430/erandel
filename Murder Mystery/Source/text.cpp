@@ -348,6 +348,7 @@ void TextClass::ModeChange(int &ModeFlag,int &ChangeFlag,UserClass &User){
 		if( Select == GAME_MENU::BACKLOG ) WriteMode = BACKLOG;
 		if( Select == GAME_MENU::CONFIG  ) ModeFlag  = MODE::CONFIG;
 		if( Select == GAME_MENU::AUTO )    AutoFlag *= -1;
+		if (Select == GAME_MENU::ITEM) ModeFlag = MODE::ITEM;
 		ChangeFlag = TRUE;
 	}
 
@@ -740,11 +741,15 @@ void TextClass::AutoFunction(UserClass &User){
 
  void TextClass::SelectWrite(UserClass& User,int OptionNumber)
  {
+	 enum { DIALOG, ENTER};
+
+	 SE.SetVol(User);
 	 //メニューパラメータセット
 	 static struct MenuArg_rec SelectParam;
 	 if (SelectFlag == 0)
 	 {	 
 		 SetMenuParam_Select(SelectParam, Option[OptionNumber][0], OptionCount[OptionNumber]);
+		 SE.PlayMusic(DIALOG);
 		 SelectFlag = 1;
 	 }
 	 static SelectMenuClass GameSelectMenu(SelectParam);
@@ -756,6 +761,7 @@ void TextClass::AutoFunction(UserClass &User){
 		 if (Selected != 10)
 		 { 
 			 SceneCount = stoi(Option[OptionNumber][1][Selected]);
+			 SE.PlayMusic(ENTER);
 			 TextCount = 0;
 			 SerifCount = 0;
 			 SelectFlag = 0;
@@ -965,6 +971,10 @@ void TextClass::SetGameData(UserClass &User){
 	SaveData.BGMCode    = User.GetBGMCode();
 	SaveData.BackCode   = User.GetBackCode();
 	SaveData.CharCode	= User.GetCharacterCode();
+	for (int i = 0; i < MAX_FLAG; ++i)//ユーザークラスのフラグ情報をコピー
+	{
+		SaveData.Flags[i] = User.CheckFlag(i);
+	}
 	SaveData.Year		= Date->tm_year+1900;
 	SaveData.Mon		= Date->tm_mon+1;
 	SaveData.Day		= Date->tm_mday;

@@ -6,7 +6,8 @@ class SaveClass{
 		//セーブデータ一覧(構造体にできそう？)
 		int		   SaveHash[3][10];				//ハッシュ
 		short int  SaveCount[3][10][3];			//データ受け取り配列(シーンカウント、ゲームカウント)
-		bool       SaveFlag[3][10][32];                //データ受け取り配列(フラグ)
+		bool       SaveFlag[3][10][32];         //データ受け取り配列(フラグ)
+		int		   SaveStatus[3][10][3];		//データ受け取り配列(ステータス)
 		int        SaveCode[3][10][3];			//データ受け取り配列(BGM,Back)								
 		int		   SaveDate[3][10][3];			//日付配列(年,月,日)
 		int		   SaveTextLength[3][10][1];	//一行テキスト文字数

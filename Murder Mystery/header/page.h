@@ -12,6 +12,7 @@ class PageClass{
 		int  GetMode();											//現在モード取得
 		SaveClass		Save;									//セーブクラスインスタンス(集約-分解構造)
 		ConfigClass		Conf;									//コンフィグクラスインスタンス
+		ItemClass		Item;									//アイテムクラスインスタンス
 };
 
 
@@ -33,7 +34,7 @@ class GamePageClass : public PageClass{
 	public:
 		GamePageClass();					//初期化
 		void Main(UserClass &User);			//ゲームページの入り口
-		TextClass		Text;				//テキストクラス(集約-分解構造)	
+		TextClass		Text;				//テキストクラス(集約-分解構造)			
 		GameSoundClass  Sound;				//ゲームサウンドクラス			
 		EndingClass     Ending;				//エンディングクラス
 };

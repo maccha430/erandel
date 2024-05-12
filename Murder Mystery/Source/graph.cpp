@@ -299,28 +299,38 @@ void ConfigGraphClass::Draw(){
 }
 
 /*--------------------------------
- | セレクトグラフィッククラス 　　|
+ |アイテムグラフィッククラス 　　 |
   --------------------------------*/
-SelectGraphClass::SelectGraphClass() {
+ItemGraphClass::ItemGraphClass() {
 	Load();			//画像読み込み
 	SetPoint();		//描画座標セット
 }
-void SelectGraphClass::Load() {
+void ItemGraphClass::Load() {
 	//背景ロード
-	GameBackHandle.push_back(LoadGraph("./resource/graph/BackGround1.png"));
-	GameBackHandle.push_back(LoadGraph("./resource/graph/BackGround2.png"));
-
-
-
+	BackgroundHandle = LoadGraph("./resource/graph/secret_back.png");
 }
 
+
 /*描画座標セット*/
-void SelectGraphClass::SetPoint() {
+void ItemGraphClass::SetPoint() {
 	//背景
 	GameBackPoint[GRAPH::X] = 0;
 	GameBackPoint[GRAPH::Y] = 0;
 }
 
+
+
+/*画像描画*/
+void ItemGraphClass::Draw() {
+	//背景描画
+	DrawGraph(GameBackPoint[GRAPH::X], GameBackPoint[GRAPH::Y], BackgroundHandle, TRUE);
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 100);
+	DrawBox(40, 50, windowX - 40, windowY - 70, GetColor(0, 0, 0), TRUE);
+	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+
+	//画面タイトル
+	DrawString(10, 10, "― アイテム一覧 ―", GetColor(255, 255, 255));
+}
 
 
 /*--------------------------------

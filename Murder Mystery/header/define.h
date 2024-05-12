@@ -44,12 +44,14 @@ typedef vector< vector<std::string> > Dvector_s;
 #include"config_menu.h"
 #include"config.h"
 #include"secret.h"
+#include"item.h"
 #include"ending.h"
 #include"page.h"
 #include"function.h"
 #include"scroll_bar.h"
 #include"back_log.h"
 #include"dialog.h"
+
 
 /*グローバル変数宣言 暇があれば消す*/
 #ifdef GLOBAL_INSTANCE
@@ -71,9 +73,10 @@ extern int TextFontHandle;
 #define windowX 1280
 #define windowY 720
 
-//フラグ数(save.h/struct.hは仕様上定数で書かれているのでフラグ数を増やす場合そこも書き換えること)
+//フラグ数(save.h/struct.h/item.hは仕様上定数で書かれているのでフラグ数を増やす場合そこも書き換えること)
 #define MAX_FLAG 32 
-
+//アイテム数
+#define MAX_ITEM 8
 //メニュークラスで使う
 namespace MENU{
 	enum{IMAGE,TEXT,DATA};
@@ -98,7 +101,7 @@ namespace TITLE{
 
 //ゲーム画面のメニューで使う
 namespace GAME_MENU{
-	enum{SAVE,LOAD,AUTO,BACKLOG,CONFIG};
+	enum{SAVE,LOAD,AUTO,BACKLOG,CONFIG,ITEM};
 }
 
 //ページ一覧
@@ -108,7 +111,7 @@ namespace PAGE{
 
 //モード一覧
 namespace MODE{
-	enum{MAIN,SAVE,LOAD,CONFIG,BACKLOG,SECRET,OTHER,END};
+	enum{MAIN,SAVE,LOAD,CONFIG,BACKLOG,SECRET,OTHER,END,ITEM};
 }
 
 //コンフィグで使う

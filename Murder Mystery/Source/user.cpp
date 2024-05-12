@@ -9,7 +9,7 @@ UserClass::UserClass(){
 	PageFlag			= PAGE::TITLE;
 	SaveData.SceneCount = 0;
 	SaveData.TextCount	= 0;
-	SaveData.StatusCode = -1;
+	for (int i = 0; i <3; ++i) { SaveData.StatusCode[i] = -1; }
 	for (int i = 0; i < MAX_FLAG; ++i) { SaveData.Flags[i] = false; }
 
 	//コンフィグデータ初期化
@@ -177,8 +177,28 @@ void UserClass::SetCharacterCode(int Code){ this->CharCode = Code; }
 int  UserClass::GetCharacterCode(){return CharCode;}
 
 /*ステータスコードセット･ゲット*/
-void UserClass::SetStatusCode(int Code) { this->SaveData.StatusCode = Code; }
-int  UserClass::GetStatusCode() { return this->SaveData.StatusCode; }
+void UserClass::SetStatusCode(int Status) 
+{
+	enum { STR, DEX, INT };
+	if (Status == GAME_STATUS::STR) {
+		SaveData.StatusCode[GAME_STATUS::STR] = 4;
+		SaveData.StatusCode[GAME_STATUS::DEX] = 3;
+		SaveData.StatusCode[GAME_STATUS::INT] = 2;
+	}
+	else if (Status == GAME_STATUS::DEX) {
+		SaveData.StatusCode[GAME_STATUS::STR] = 2;
+		SaveData.StatusCode[GAME_STATUS::DEX] = 4;
+		SaveData.StatusCode[GAME_STATUS::INT] = 3;
+	}
+	else if (Status == GAME_STATUS::INT) {
+		SaveData.StatusCode[GAME_STATUS::STR] = 2;
+		SaveData.StatusCode[GAME_STATUS::DEX] = 3;
+		SaveData.StatusCode[GAME_STATUS::INT] = 4;
+	}
+}
+
+
+int  UserClass::GetStatusCode(int Status) { return this->SaveData.StatusCode[Status]; }
 /*フラグon,フラグチェック*/
 void UserClass::SetFlagOn(int FlagNumber)
 {

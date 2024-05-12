@@ -33,7 +33,7 @@ void SetMenuParam_Title(MenuArg_rec &MenuArg,bool SecretFlag){
 /*メニューパラメータセット　―ゲーム画面―*/
 void SetMenuParam_GameRight(MenuArg_rec &MenuArg){
 	char TmpText[6][32] = {
-		"Save","Load","Auto","Backlog","Config"
+		"Save","Load","Auto","Backlog","Config","Items"
 	};
 	
 	MenuArg.DrawX			= windowX-100;

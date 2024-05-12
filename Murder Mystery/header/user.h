@@ -49,8 +49,8 @@
 		int  GetCharacterCode();
 
 		//キャラクタコード
-		void SetStatusCode(int Code);
-		int  GetStatusCode();
+		void SetStatusCode(int Status);
+		int  GetStatusCode(int Status);
 
 		//フラグ
 		void SetFlagOn(int FlagNumber);

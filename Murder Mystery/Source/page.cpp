@@ -127,6 +127,11 @@ void GamePageClass::Main(UserClass &User){
 			Conf.Main(User,ChangeFlag);
 			Conf.ModeChange(ModeFlag,ChangeFlag,User);
 		break;
+
+		//アイテム画面
+		case MODE::ITEM:
+			Item.Main(User, ChangeFlag);
+			Item.ModeChange(ModeFlag, ChangeFlag, User);
 	}
 
 	//ページが変わるとき、後処理をする

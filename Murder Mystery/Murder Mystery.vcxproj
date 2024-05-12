@@ -151,6 +151,7 @@
     <ClInclude Include="header\game.h" />
     <ClInclude Include="header\graph.h" />
     <ClInclude Include="header\input.h" />
+    <ClInclude Include="header\item.h" />
     <ClInclude Include="header\menu.h" />
     <ClInclude Include="header\mode.h" />
     <ClInclude Include="header\page.h" />
@@ -173,6 +174,7 @@
     <ClCompile Include="Source\ending.cpp" />
     <ClCompile Include="Source\game.cpp" />
     <ClCompile Include="Source\graph.cpp" />
+    <ClCompile Include="Source\item.cpp" />
     <ClCompile Include="Source\key.cpp" />
     <ClCompile Include="Source\main.cpp" />
     <ClCompile Include="Source\menu.cpp" />

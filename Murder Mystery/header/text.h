@@ -99,5 +99,7 @@ class TextClass{
 
 		//ゲームグラフィック
 		TextGraphClass		Graph;
+		//SEクラス(選択肢用)
+		SESoundClass SE;
 				
 };

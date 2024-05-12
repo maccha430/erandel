@@ -78,6 +78,14 @@ class ConfigListClass : public MenuClass{
 		ConfigListClass(int SetNo,MenuArg_rec &MenuArg);
 		void Draw();
 };
+/*------------------------
+ | アイテムメニュークラス |
+  ------------------------*/
+class ItemMenuClass : public MenuClass {
+public:
+	ItemMenuClass(MenuArg_rec& MenuArg);
+	void Draw();
+};
 
 /*----------------------------
  | シークレットメニュークラス |
