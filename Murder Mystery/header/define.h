@@ -51,6 +51,8 @@ typedef vector< vector<std::string> > Dvector_s;
 #include"scroll_bar.h"
 #include"back_log.h"
 #include"dialog.h"
+#include"time.h"
+#include"stdlib.h"
 
 
 /*ƒOƒ[ƒoƒ‹•Ï”éŒ¾ ‰É‚ª‚ ‚ê‚ÎÁ‚·*/

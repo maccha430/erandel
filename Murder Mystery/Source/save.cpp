@@ -338,6 +338,10 @@ void SaveClass::Save(UserClass &User){
 			SaveDate[Page][Select][YEAR]    = SaveData.Year       ;
 			SaveDate[Page][Select][MON]     = SaveData.Mon	      ;
 			SaveDate[Page][Select][DAY]     = SaveData.Day		  ;
+			for (int i = 0; i < 3; ++i)
+			{
+				SaveStatus[Page][Select][i] = SaveData.StatusCode[i];
+			}
 			for (int i = 0; i < MAX_FLAG; ++i)
 			{
 				SaveFlag[Page][Select][i] = SaveData.Flags[i];

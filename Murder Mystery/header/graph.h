@@ -62,14 +62,14 @@ class TextGraphClass : public GraphClass{
 		vector<int> GameBackHandle;		//背景画像
 		int CharacterHandle;			//キャラクタ画像
 		int TextBoxHandle;				//テキストボックス
-		int SelectBoxHandle;			//セレクトボックス
+		int DiceHandle[6];				//ダイス画像
 
 		//描画座標
 		int GameBackPoint[2];			//背景画像
 		int CharacterPoint[2];			//キャラクタ画像
 		int TextBoxPoint[2];			//テキストボックス
-		int SelectBoxPoint[2];			//セレクトボックス
-
+		int LeftDicePoint[2];			//左ダイス
+		int RightDicePoint[2];			//右ダイス
 		//メソッド
 		void Load();					//画像ロード
 		void SetPoint();				//画像座標セット
@@ -80,6 +80,8 @@ class TextGraphClass : public GraphClass{
 		void Draw();					//一応ね、あとで消したい
 		void DrawBack(UserClass &User);	//背景描画
 		void DrawChar(UserClass &User);	//キャラクタ描画
+		void DrawLeftDice(int dice);
+		void DrawRightDice(int dice);
 		void DrawWindow();				//テキストウィンドウ描画
 };
 

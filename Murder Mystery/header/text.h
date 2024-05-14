@@ -5,18 +5,22 @@ class TextClass{
 	private:
 		//定数
 		enum{SceneMax=8,RowMax=1024};						//シーン最大数、行数最大
-		enum{NORMAL,EYECATCH,BACKLOG,NOTWINDOW,CHANGE,END,TITLE,SELECT}; //描画モード定数
+		enum{NORMAL,EYECATCH,BACKLOG,NOTWINDOW,CHANGE,END,TITLE,SELECT,DICEROLL}; //描画モード定数
 
 		int  Select;										//選択メニュー
 		int  MenuEnterFlag;									//メニュー決定フラグ 
 		int  WriteMode;									    //描画モード格納
 		int  Selected;										//選択した選択肢
+		int  Counter;										//経過カウンター
+		bool ClickFlag;										//クリック時のフラグ
+		int RollResult;										//判定結果
 
 		short int  TextCount;								//テキストカウンタ
 		short int  SceneCount;								//シーンカウンタ
 		short int  SerifCount;								//セリフカウンタ
 
 		int  SelectCount;									//選択肢番号
+		int  ReqStatus;										//要求ステータス
 		int  SkipPermitFlag;								//スキップ許可フラグ
 		int  SelectFlag;									//選択肢作成フラグ
 		int  AutoFlag;										//オートフラグ　
@@ -66,8 +70,9 @@ class TextClass{
 		//選択肢関連
 		void SelectWrite(UserClass& User, int OptionNumber);
 
-		
-
+		//ダイスロール関連
+		void DiceRoll(UserClass& User, int ReqStatus);
+ 
 		//スキップ・オート
 		void SkipFunction(UserClass &User);					//スキップ処理
 		void CheckRead();									//既読チェック

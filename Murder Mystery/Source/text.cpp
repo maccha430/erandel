@@ -19,6 +19,7 @@ void TextClass::InitVar(){
 	Select = -1;
 	SelectFlag = 0;
 	AutoFlag = -1;
+	Counter = 0;
 	TextCount = 0;
 	SceneCount = 0;
 	SerifCount = 0;
@@ -313,6 +314,7 @@ void TextClass::Main(UserClass &User){
 	if( WriteMode == EYECATCH  ) EyeCatching(User);	//アイキャッチ
 	if( WriteMode == BACKLOG   ) BackLogMain(User);	//バックログ
 	if (WriteMode == SELECT    ) SelectWrite(User, SelectCount);//選択肢
+	if (WriteMode == DICEROLL  ) DiceRoll(User,ReqStatus);//判定
 	if( WriteMode == NOTWINDOW ) NotWindow();		//ウィンドウ非表示
 	if( WriteMode == END	   ) GameEnd(User);		//ゲーム終了
 
@@ -348,7 +350,7 @@ void TextClass::ModeChange(int &ModeFlag,int &ChangeFlag,UserClass &User){
 		if( Select == GAME_MENU::BACKLOG ) WriteMode = BACKLOG;
 		if( Select == GAME_MENU::CONFIG  ) ModeFlag  = MODE::CONFIG;
 		if( Select == GAME_MENU::AUTO )    AutoFlag *= -1;
-		if (Select == GAME_MENU::ITEM) ModeFlag = MODE::ITEM;
+ 		if (Select == GAME_MENU::ITEM) ModeFlag = MODE::ITEM;
 		ChangeFlag = TRUE;
 	}
 
@@ -760,7 +762,7 @@ void TextClass::AutoFunction(UserClass &User){
 	 if (Mouse->GetState(MOUSE::LEFT) == TRUE) {
 		 if (Selected != 10)
 		 { 
-			 SceneCount = stoi(Option[OptionNumber][1][Selected]);
+			 SceneCount = stoi(Option[OptionNumber][1][Selected-1]);
 			 SE.PlayMusic(ENTER);
 			 TextCount = 0;
 			 SerifCount = 0;
@@ -769,6 +771,70 @@ void TextClass::AutoFunction(UserClass &User){
 		 }
 	 }
  }
+
+ void TextClass::DiceRoll(UserClass& User, int ReqStatus)
+ {
+	 SE.SetVol(User);
+	 enum { CANCEL,ENTER };
+
+	 SetDrawBlendMode(DX_BLENDMODE_ALPHA, 120);
+	 DrawBox(50, 50, windowX - 50, windowY - 50, GetColor(0, 0, 0), TRUE);
+	 SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+	 DrawString(705, 100, "この出目以下で成功", GetColor(255, 255, 255));
+	 DrawString(300, 100, "あなたの出目", GetColor(255, 255, 255));
+	 MouseClass* Mouse = MouseClass::GetInstance();
+	 Graph.DrawRightDice(ReqStatus);
+	 Counter++;
+	 if (ClickFlag == false)
+	 {
+		 Graph.DrawLeftDice(Counter / 50);
+		 if (Counter == 300)
+		 {
+			 Counter = 0;
+		 }
+	 }
+	 else {
+		 if (RollResult + 1 <= ReqStatus)
+		 {
+			 DrawString(580, 200, "成功!", GetColor(255, 255, 255));
+			 Graph.DrawLeftDice(RollResult);
+			 Graph.DrawRightDice(ReqStatus);
+		 }
+		 else {
+			 DrawString(580, 200, "失敗!", GetColor(255, 255, 255));
+			 Graph.DrawLeftDice(RollResult);
+			 Graph.DrawRightDice(ReqStatus);
+		 }
+	 }
+	
+	 if (Mouse->GetState(MOUSE::LEFT) == TRUE) {
+		 
+		 if (ClickFlag == false)
+		 {
+			 srand((unsigned int)time(NULL));
+			 RollResult = rand() % 6;
+			 ClickFlag = true;
+			 if (RollResult + 1 <= ReqStatus){SE.PlayMusic(ENTER);}
+			 else { SE.PlayMusic(CANCEL); }
+		 }
+		 else {
+			 Counter = 0;
+			 ClickFlag = false;
+			 if (RollResult + 1 <= ReqStatus)
+			 {
+				 TextCount++;
+				 SerifCount++;
+			 }
+			 TextCount++;
+			 SerifCount++;
+			 WriteMode = NORMAL;
+		 }
+		 
+		 
+	 }
+ }
+
+
 
 /*バックログ*/
 void TextClass::BackLogMain(UserClass &User){
@@ -971,6 +1037,10 @@ void TextClass::SetGameData(UserClass &User){
 	SaveData.BGMCode    = User.GetBGMCode();
 	SaveData.BackCode   = User.GetBackCode();
 	SaveData.CharCode	= User.GetCharacterCode();
+	for (int i = 0; i < 3; ++i)
+	{
+		SaveData.StatusCode[i] = User.GetStatusCode(i);
+	}
 	for (int i = 0; i < MAX_FLAG; ++i)//ユーザークラスのフラグ情報をコピー
 	{
 		SaveData.Flags[i] = User.CheckFlag(i);
@@ -1064,9 +1134,9 @@ void TextClass::CheckControlCode(UserClass &User){
 		//ステータス
 		if (Name[SceneCount][TextCount] == "ステータス") {
 			StatusCode = Text[SceneCount][TextCount];
-			if (StatusCode == "力が強い") User.SetStatusCode(GAME_STATUS::STR);
-			if (StatusCode == "手先が器用")  User.SetStatusCode(GAME_STATUS::DEX);
-			if (StatusCode == "頭が良い")  User.SetStatusCode(GAME_STATUS::INT);
+			if (StatusCode == "STR") User.SetStatusCode(GAME_STATUS::STR);
+			if (StatusCode == "DEX")  User.SetStatusCode(GAME_STATUS::DEX);
+			if (StatusCode == "INT")  User.SetStatusCode(GAME_STATUS::INT);
 			TextCount++;
 			SerifCount++;
 			EventFlag = TRUE;
@@ -1097,6 +1167,14 @@ void TextClass::CheckControlCode(UserClass &User){
 			TextCount++;
 			SerifCount++;
 			EventFlag = TRUE;
+		}
+		//判定
+		if (Name[SceneCount][TextCount] == "判定") {
+			StatusCode = Text[SceneCount][TextCount];
+			if (StatusCode == "STR") ReqStatus = User.GetStatusCode(GAME_STATUS::STR);
+			if (StatusCode == "DEX") ReqStatus = User.GetStatusCode(GAME_STATUS::DEX);
+			if (StatusCode == "INT") ReqStatus = User.GetStatusCode(GAME_STATUS::INT);
+			WriteMode = DICEROLL;
 		}
 		//エンド
 		if( Name[SceneCount][TextCount] == "エンド" ){

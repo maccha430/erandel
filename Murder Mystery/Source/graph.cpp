@@ -75,6 +75,14 @@ void TextGraphClass::Load(){
 
 	//テキストボックス
 	TextBoxHandle	 = LoadGraph("./resource/graph/TextBox.png");
+
+	//ダイス
+	DiceHandle[0]=	LoadGraph("./resource/graph/saikoro-illust1.png");
+	DiceHandle[1] = LoadGraph("./resource/graph/saikoro-illust2.png");
+	DiceHandle[2] = LoadGraph("./resource/graph/saikoro-illust3.png");
+	DiceHandle[3] = LoadGraph("./resource/graph/saikoro-illust4.png");
+	DiceHandle[4] = LoadGraph("./resource/graph/saikoro-illust5.png");
+	DiceHandle[5] = LoadGraph("./resource/graph/saikoro-illust6.png");
 	
 }
 
@@ -92,6 +100,13 @@ void TextGraphClass::SetPoint(){
 	TextBoxPoint[GRAPH::X]  = 0;
 	TextBoxPoint[GRAPH::Y]  = windowY - windowY / 3;
 
+	//ダイス左
+	LeftDicePoint[GRAPH::X] = 275;
+	LeftDicePoint[GRAPH::Y] = 200;
+
+	//ダイス右
+	RightDicePoint[GRAPH::X] = 705;
+	RightDicePoint[GRAPH::Y] = 200;
 
 }
 
@@ -126,6 +141,20 @@ void TextGraphClass::DrawChar(UserClass &User){
 	}
 }
 
+void TextGraphClass::DrawLeftDice(int dice)
+{
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 255);
+	DrawGraph(LeftDicePoint[GRAPH::X], LeftDicePoint[GRAPH::Y], DiceHandle[dice], TRUE);
+	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+}
+
+void TextGraphClass::DrawRightDice(int dice)
+{
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 255);
+	DrawGraph(RightDicePoint[GRAPH::X], RightDicePoint[GRAPH::Y], DiceHandle[dice-1], TRUE);
+	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+}
+
 /*テキストウィンドウ描画*/
 void TextGraphClass::DrawWindow(){
 	//テキストボックス描画
@@ -133,6 +162,7 @@ void TextGraphClass::DrawWindow(){
 	DrawGraph(TextBoxPoint[GRAPH::X],TextBoxPoint[GRAPH::Y],TextBoxHandle,TRUE);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);
 }
+
 
 /*デバッグ用*/
 void TextGraphClass::Draw(){}
