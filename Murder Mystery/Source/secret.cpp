@@ -16,7 +16,7 @@ SecretClass::SecretClass(){
 /*メニューパラメータセット*/
 void SecretClass::SetMenuParam(){
 	char TmpText[6][32] = {
-		"タイトルの曲","回想の曲","出会いの曲","別れの曲","エンディング","戻る"
+		"エランデルについて","苦労したこと","エンドA","エンドB","エンドC","戻る"
 	};
 	
 	MusicListParam.DrawX			= 150;
@@ -118,10 +118,15 @@ void SecretClass::Main(UserClass& User,int &ChangeFlag){
 	//クリックされたら音楽再生
 	if( Mouse->GetState(MOUSE::LEFT) > 0  ){
 		Sound.SetVol( User );
-		Sound.PlayMusic( Select );
+		if(Select==3||Select==4){ Sound.PlayMusic(2); }
+		else{ Sound.PlayMusic(1); }
 		SetNo = Select;
 
-		if( Select == 5 ) User.SetPage( PAGE::TITLE );
+		if (Select == 5)
+		{
+			Sound.StopBGM();
+			User.SetPage(PAGE::TITLE);
+		}
 	}
 
 	if( SetNo < 0 ) SetNo = 5;

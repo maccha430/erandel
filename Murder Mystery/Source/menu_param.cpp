@@ -57,25 +57,72 @@ void SetMenuParam_GameRight(MenuArg_rec &MenuArg){
 
 }
 /*メニューパラメータセット　―選択肢―*/
-void SetMenuParam_Select(MenuArg_rec& MenuArg,vector<std::string> Option,int OptionCount) {
+ void SetMenuParam_Select(MenuArg_rec& MenuArg,vector<std::string> Option,int ListMin,int ListMax) {
 
 	MenuArg.DrawX = 150;
 	MenuArg.DrawY = 150;
+	for (int i = 0; i < ListMax; i++) {
+		strcpy(MenuArg.DrawText[i], Option[i].c_str());
+	}
 	MenuArg.Interval = 70;
 	MenuArg.Width = 30;
 	MenuArg.Height = 30;
-	MenuArg.ListMin = 1;
-	MenuArg.ListMax = OptionCount+1;
-	MenuArg.AtherNo = 10;
+	MenuArg.ListMin = ListMin;
+	MenuArg.ListMax = ListMax;
+	MenuArg.AtherNo = -1;
 	MenuArg.AlphaNo = 50;
 	MenuArg.DrawFlag = MENU::TEXT;
 	MenuArg.DirectionFlag = MENU::COL;
-
-	for (int i = 0; i < OptionCount; i++) {
-		strcpy(MenuArg.DrawText[i],Option[i].c_str());
-	}
-
 	MenuArg.TextColor = GetColor(255, 255, 255);
 	MenuArg.FontFamily = MENU::GOSIC;
 
 }
+
+ void SetMenuParam_SelectLR(MenuArg_rec& MenuArgLeft, MenuArg_rec& MenuArgRight,vector<std::string> Option, int ListMin, int ListMax) {
+	 
+	 int SplitNumber = ListMax-ListMin;
+	 int j= 0;
+	 if ((SplitNumber % 2) == 1)
+	 {
+		 SplitNumber++;
+		 SplitNumber /= 2;
+	 }
+	 else { SplitNumber /= 2; }
+	 MenuArgLeft.DrawX = 150;
+	 MenuArgLeft.DrawY = 150;
+	 MenuArgLeft.Interval = 70;
+	 MenuArgLeft.Width = 30;
+	 MenuArgLeft.Height = 30;
+	 MenuArgLeft.ListMin = ListMin;
+	 MenuArgLeft.ListMax = SplitNumber;
+	 MenuArgLeft.AtherNo = -1;
+	 MenuArgLeft.AlphaNo = 50;
+	 MenuArgLeft.DrawFlag = MENU::TEXT;
+	 MenuArgLeft.DirectionFlag = MENU::COL;
+	 MenuArgLeft.TextColor = GetColor(255, 255, 255);
+	 MenuArgLeft.FontFamily = MENU::GOSIC;
+
+	 MenuArgRight.DrawX = 500;
+	 MenuArgRight.DrawY = 150;
+	 MenuArgRight.Interval = 70;
+	 MenuArgRight.Width = 30;
+	 MenuArgRight.Height = 30;
+	 MenuArgRight.ListMin = SplitNumber;
+	 MenuArgRight.ListMax = ListMax;
+	 MenuArgRight.AtherNo = -1;
+	 MenuArgRight.AlphaNo = 50;
+	 MenuArgRight.DrawFlag = MENU::TEXT;
+	 MenuArgRight.DirectionFlag = MENU::COL;
+	 MenuArgRight.TextColor = GetColor(255, 255, 255);
+	 MenuArgRight.FontFamily = MENU::GOSIC;
+	 for (int i = 0; i < SplitNumber; ++i)
+	 {
+		 strcpy(MenuArgLeft.DrawText[i], Option[i].c_str());
+	 }
+	 for (int i = SplitNumber; i < ListMax; ++i)
+	 {
+		 strcpy(MenuArgRight.DrawText[j], Option[i].c_str());
+		 ++j;
+	 }
+
+ }

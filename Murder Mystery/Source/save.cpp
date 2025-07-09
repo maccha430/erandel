@@ -101,6 +101,14 @@ void SaveClass::Main(int &ChangeFlag){
 	LoadData.Year       = SaveDate[Page][Select][YEAR];
 	LoadData.Mon		= SaveDate[Page][Select][MON];
 	LoadData.Day		= SaveDate[Page][Select][DAY];
+	for (int i = 0; i < 3; ++i)
+	{
+		LoadData.StatusCode[i]=SaveStatus[Page][Select][i];
+	}
+	for (int i = 0; i < MAX_FLAG; ++i)
+	{
+		LoadData.Flags[i]=SaveFlag[Page][Select][i];
+	}
 	LoadData.TextLength = SaveTextLength[Page][Select][0];
 	strcpy(LoadData.Text,SaveText[Page][Select]);
 
@@ -250,6 +258,8 @@ void SaveClass::GetSaveData(){
 				fread(SaveCount[j][i],3,sizeof(short int),fp);
 				fread(SaveCode[j][i],3,sizeof(int),fp);
 				fread(SaveDate[j][i],3,sizeof(int),fp);
+				fread(SaveStatus[j][i], 3, sizeof(int), fp);
+				fread(SaveFlag[j][i], 32, sizeof(bool), fp);
 				fread(SaveTextLength[j][i],1,sizeof(int),fp);
 				TextSize = (size_t)SaveTextLength[j][i][0];
 				fread(SaveText[j][i],1,sizeof(SaveText[j][i]),fp);
@@ -260,7 +270,7 @@ void SaveClass::GetSaveData(){
 				TmpHash = Hash%Key;
 				if( Hash != TmpHash ){
 					//強制終了
-					MessageBox(NULL,"どうしてデータの改竄なんてしたのっ！\n(プログラムの不具合の場合は開発者まで連絡ください。)","焼きそばメロンパン",MB_OK);
+					MessageBox(NULL,"データの改ざんを検知しました。\n(プログラムの不具合の場合は開発者まで連絡ください。)","選択式脱出RPG エランデル",MB_OK);
 					exit(0);
 				}
 				TmpHash = 0;
@@ -363,6 +373,7 @@ void SaveClass::Save(UserClass &User){
 					fwrite(SaveCount[j][i],3,sizeof(short int),fp);
 					fwrite(SaveCode[j][i],3,sizeof(int),fp);
 					fwrite(SaveDate[j][i],3,sizeof(int),fp);
+					fwrite(SaveStatus[j][i], 3, sizeof(int), fp);
 					fwrite(SaveFlag[j][i], 32, sizeof(bool), fp);
 					fwrite(SaveTextLength[j][i],1,sizeof(int),fp);
 					TextSize = (size_t)SaveTextLength[j][i][0];
@@ -549,6 +560,7 @@ void SaveClass::Delete(UserClass &User){
 					fwrite(SaveCount[j][i],3,sizeof(short int),fp);
 					fwrite(SaveCode[j][i],3,sizeof(int),fp);
 					fwrite(SaveDate[j][i],3,sizeof(int),fp);
+					fwrite(SaveStatus[j][i], 3, sizeof(int), fp);
 					fwrite(SaveFlag[j][i], 32, sizeof(bool), fp);
 					fwrite(SaveTextLength[j][i],1,sizeof(int),fp);
 					TextSize = (size_t)SaveTextLength[j][i][0];

@@ -38,7 +38,7 @@ SaveGraphClass::SaveGraphClass(){
 /*âÊëúÉçÅ[Éh*/
 void SaveGraphClass::Load(){
 	//îwåiâÊëú
-	BackgroundHandle = LoadGraph("./resource/graph/save_back.png");
+	BackgroundHandle = LoadGraph("./resource/graph/seimon.jpg");
 }
 
 /*ï`âÊç¿ïWÉZÉbÉg*/
@@ -67,8 +67,22 @@ TextGraphClass::TextGraphClass(){
 /*âÊëúÉçÅ[Éh*/
 void TextGraphClass::Load(){
 	//îwåiÉçÅ[Éh
-	GameBackHandle.push_back( LoadGraph("./resource/graph/BackGround1.png") );
-	GameBackHandle.push_back( LoadGraph("./resource/graph/BackGround2.png") );
+	GameBackHandle.push_back( LoadGraph("./resource/graph/classroom.png") );
+	GameBackHandle.push_back( LoadGraph("./resource/graph/rouka.jpg") );
+	GameBackHandle.push_back(LoadGraph("./resource/graph/genkan.jpg"));
+	GameBackHandle.push_back(LoadGraph("./resource/graph/syokuin_mae.jpg"));
+	GameBackHandle.push_back(LoadGraph("./resource/graph/syokuin.jpg"));
+	GameBackHandle.push_back(LoadGraph("./resource/graph/hoken.jpg"));
+	GameBackHandle.push_back(LoadGraph("./resource/graph/rika.png"));
+	GameBackHandle.push_back(LoadGraph("./resource/graph/housou.jpg"));
+	GameBackHandle.push_back(LoadGraph("./resource/graph/ongaku.jpg"));
+	GameBackHandle.push_back(LoadGraph("./resource/graph/kaigi.jpg"));
+	GameBackHandle.push_back(LoadGraph("./resource/graph/hijoukaidan.jpg"));
+	GameBackHandle.push_back(LoadGraph("./resource/graph/taiikukan.png"));
+	GameBackHandle.push_back(LoadGraph("./resource/graph/chika.png"));
+	GameBackHandle.push_back(LoadGraph("./resource/graph/tunnel.jpg"));
+	GameBackHandle.push_back(LoadGraph("./resource/graph/jitaku.jpg"));
+	GameBackHandle.push_back(LoadGraph("./resource/graph/background_chalkboard.png"));
 	
 	//ÉLÉÉÉâÉNÉ^ï`âÊ
 	CharacterHandle = LoadGraph("./resource/graph/character1.png");
@@ -114,16 +128,57 @@ void TextGraphClass::SetPoint(){
 void TextGraphClass::DrawBack(UserClass &User){
 	//îwåiï`âÊ
 	switch( User.GetBackCode() ){
-		case GAME_BACK::KAWARA:
-			DrawGraph(GameBackPoint[GRAPH::X],GameBackPoint[GRAPH::Y],GameBackHandle[GAME_BACK::KAWARA],TRUE);
-		break;	
-	
-		case GAME_BACK::YOZORA:
-			DrawGraph(GameBackPoint[GRAPH::X],GameBackPoint[GRAPH::Y],GameBackHandle[GAME_BACK::YOZORA],TRUE);
+	case GAME_BACK::CLASSROOM:
+		DrawGraph(GameBackPoint[GRAPH::X], GameBackPoint[GRAPH::Y], GameBackHandle[GAME_BACK::CLASSROOM], TRUE);
+		break;
+	case GAME_BACK::ROUKA:
+		DrawGraph(GameBackPoint[GRAPH::X], GameBackPoint[GRAPH::Y], GameBackHandle[GAME_BACK::ROUKA], TRUE);
+		break;
+	case GAME_BACK::GENKAN:
+		DrawGraph(GameBackPoint[GRAPH::X], GameBackPoint[GRAPH::Y], GameBackHandle[GAME_BACK::GENKAN], TRUE);
+		break;
+	case GAME_BACK::SYOKUIN_MAE:
+		DrawGraph(GameBackPoint[GRAPH::X], GameBackPoint[GRAPH::Y], GameBackHandle[GAME_BACK::SYOKUIN_MAE], TRUE);
+		break;
+	case GAME_BACK::SYOKUIN:
+		DrawGraph(GameBackPoint[GRAPH::X], GameBackPoint[GRAPH::Y], GameBackHandle[GAME_BACK::SYOKUIN], TRUE);
+		break;
+	case GAME_BACK::HOKEN:
+		DrawGraph(GameBackPoint[GRAPH::X], GameBackPoint[GRAPH::Y], GameBackHandle[GAME_BACK::HOKEN], TRUE);
+		break;
+	case GAME_BACK::RIKA:
+		DrawGraph(GameBackPoint[GRAPH::X], GameBackPoint[GRAPH::Y], GameBackHandle[GAME_BACK::RIKA], TRUE);
+		break;
+	case GAME_BACK::HOUSOU:
+		DrawGraph(GameBackPoint[GRAPH::X], GameBackPoint[GRAPH::Y], GameBackHandle[GAME_BACK::HOUSOU], TRUE);
+		break;
+	case GAME_BACK::ONGAKU:
+		DrawGraph(GameBackPoint[GRAPH::X], GameBackPoint[GRAPH::Y], GameBackHandle[GAME_BACK::ONGAKU], TRUE);
+		break;
+	case GAME_BACK::KAIGI:
+		DrawGraph(GameBackPoint[GRAPH::X], GameBackPoint[GRAPH::Y], GameBackHandle[GAME_BACK::KAIGI], TRUE);
+		break;
+	case GAME_BACK::HIJOUKAIDAN:
+		DrawGraph(GameBackPoint[GRAPH::X], GameBackPoint[GRAPH::Y], GameBackHandle[GAME_BACK::HIJOUKAIDAN], TRUE);
+		break;
+	case GAME_BACK::TAIIKUKAN:
+		DrawGraph(GameBackPoint[GRAPH::X], GameBackPoint[GRAPH::Y], GameBackHandle[GAME_BACK::TAIIKUKAN], TRUE);
+		break;
+	case GAME_BACK::CHIKA:
+		DrawGraph(GameBackPoint[GRAPH::X], GameBackPoint[GRAPH::Y], GameBackHandle[GAME_BACK::CHIKA], TRUE);
+		break;
+	case GAME_BACK::TUNNEL:
+		DrawGraph(GameBackPoint[GRAPH::X], GameBackPoint[GRAPH::Y], GameBackHandle[GAME_BACK::TUNNEL], TRUE);
+		break;
+	case GAME_BACK::JITAKU:
+		DrawGraph(GameBackPoint[GRAPH::X], GameBackPoint[GRAPH::Y], GameBackHandle[GAME_BACK::JITAKU], TRUE);
+		break;
+	case GAME_BACK::KOKUBAN:
+		DrawGraph(GameBackPoint[GRAPH::X], GameBackPoint[GRAPH::Y], GameBackHandle[GAME_BACK::KOKUBAN], TRUE);
 		break;
 
-		case GAME_BACK::BLACK:
-			DrawBox(0,0,windowX,windowY,GetColor(0,0,0),TRUE);
+	case GAME_BACK::BLACK:
+		DrawBox(0, 0, windowX, windowY, GetColor(0, 0, 0), TRUE);
 		break;
 	}
 }
@@ -197,7 +252,7 @@ ConfigGraphClass::ConfigGraphClass(){
 /*âÊëúÉçÅ[Éh*/
 void ConfigGraphClass::Load(){
 	//îwåiâÊëú
-	BackgroundHandle = LoadGraph("./resource/graph/conf_back.png");
+	BackgroundHandle = LoadGraph("./resource/graph/seimon.jpg");
 }
 
 /*ï`âÊç¿ïWÉZÉbÉg*/
@@ -337,7 +392,7 @@ ItemGraphClass::ItemGraphClass() {
 }
 void ItemGraphClass::Load() {
 	//îwåiÉçÅ[Éh
-	BackgroundHandle = LoadGraph("./resource/graph/secret_back.png");
+	BackgroundHandle = LoadGraph("./resource/graph/seimon.jpg");
 }
 
 
@@ -374,7 +429,7 @@ SecretGraphClass::SecretGraphClass(){
 	
 /*âÊëúÉçÅ[Éh*/
 void SecretGraphClass::Load(){
-	BackgroundHandle = LoadGraph("./resource/graph/secret_back.png");
+	BackgroundHandle = LoadGraph("./resource/graph/seimon.jpg");
 	PlayButtonHandle = LoadGraph("./resource/graph/play_button.jpg");
 }
 

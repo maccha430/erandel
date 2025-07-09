@@ -9,12 +9,12 @@ int WINAPI WinMain(HINSTANCE hInstance,HINSTANCE hPrevInstance,LPSTR lpCmdLine,i
 	SetOutApplicationLogValidFlag(TRUE);			//ログを出力しない
 	ChangeWindowMode(TRUE);							//ウィンドウモード変更
 	SetGraphMode(1280,720,32);						//ウィンドウサイズ指定
-	SetWindowText("夜空の贈り物 ver1.01");			//ウィンドウタイトル変更
+	SetWindowText("選択式脱出RPG エランデル");			//ウィンドウタイトル変更
 	DxLib_Init();									//DXライブラリ初期化
 
 	//初期設定
 	SetUseDXArchiveFlag( TRUE );					//アーカイブファイル使用
-	SetDXArchiveExtension("kws");					//拡張子変更
+//	SetDXArchiveExtension("kws");					//拡張子変更
 	SetDrawScreen( DX_SCREEN_BACK );				//裏画面設定
 	GetClientRect(GetMainWindowHandle(),&rect);		//ウィンドウサイズ取得
 	//SetAlwaysRunFlag(TRUE);							//非アクティブでも実行

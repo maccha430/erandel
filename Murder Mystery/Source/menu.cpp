@@ -291,36 +291,33 @@ void SelectMenuClass::Draw() {
 		}
 		SetFontSize(FontSize);
 	}
-
-	//メニュー描画(4つ以下の場合)
-	if (ObjectCount <= 4) {
-		for (int i = 0; i < ObjectCount; i++) {
+	//メニュー描画(縦並びの場合)
+	if (DirectionFlag == MENU::COL) {
+		for (int i = 0; i < ListMax - ListMin; i++) {
+			//if( SelectNo == i ) SetDrawBlendMode(DX_BLENDMODE_ALPHA,AlphaNo);
 			if (SelectNo == i) TextColor = GetColor(255, 0, 0);
 			else				TextColor = GetColor(255, 255, 255);
 
+			//DrawStringS(DrawX,DrawY-50,"かわしぃ",GetColor(255,255,255),28);
+
 			if (DrawFlag == MENU::IMAGE) DrawGraph(DrawX, DrawY + (Interval + Height) * i, DrawHandle[i], TRUE);
 			if (DrawFlag == MENU::TEXT)  DrawStringShadow(DrawX, DrawY + (Interval + Height) * i, DrawText[i], TextColor, GetColor(40, 40, 40));
+			//SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);
 		}
 	}
-	else
-	{
-		for (int i = 0; i < ObjectCount; i++) {
-			if (SelectNo == i) TextColor = GetColor(255, 0, 0);
-			else				TextColor = GetColor(40, 40, 40);
 
-			if (i % 2 == 0)
-			{
-				if (DrawFlag == MENU::IMAGE) DrawGraph(DrawX, DrawY + (Interval + Height) * i/2, DrawHandle[i], TRUE);
-				if (DrawFlag == MENU::TEXT)  DrawStringShadow(DrawX, DrawY + (Interval + Height) * i, DrawText[i], TextColor, GetColor(40, 40, 40));
-			}
-			else
-			{
-				if (DrawFlag == MENU::IMAGE) DrawGraph(DrawX+ (Interval +Width[i-1]), DrawY + (Interval + Height) * (i - 1) / 2, DrawHandle[i], TRUE);
-				if (DrawFlag == MENU::TEXT)  DrawStringShadow(DrawX + (Interval + Width[i - 1]), DrawY + (Interval + Height)*(i - 1) / 2, DrawText[i], TextColor, GetColor(40, 40, 40));
-			}
+	//メニュー描画(横並びの場合)
+	if (DirectionFlag == MENU::ROW) {
+		for (int i = 0; i < ListMax - ListMin; i++) {
+			//列の現在地までの横幅を取得
+			for (int p = 0; p < i; p++) RowWidth = Width[p] + Interval;
+
+			//オブジェクト描画
+			if (SelectNo == i) SetDrawBlendMode(DX_BLENDMODE_ALPHA, AlphaNo);
+			if (DrawFlag == MENU::IMAGE) DrawGraph(DrawX + RowWidth * i, DrawY, DrawHandle[i], TRUE);
+			if (DrawFlag == MENU::TEXT)  DrawString(DrawX + RowWidth * i, DrawY, DrawText[i], TextColor);
+			SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 		}
-
-
 	}
 }
 

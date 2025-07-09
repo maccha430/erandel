@@ -21,4 +21,6 @@ void SetMenuParam_Title(MenuArg_rec &MenuArg,bool SecretFlag);
 void SetMenuParam_GameRight(MenuArg_rec &MenuArg);
 
 /*メニューパラメータセット　―選択肢―*/
-void SetMenuParam_Select(MenuArg_rec& MenuArg, vector<std::string> Option, int OptionCount);
+void SetMenuParam_Select(MenuArg_rec& MenuArg, vector<std::string> Option, int ListMin, int ListMax);
+
+void SetMenuParam_SelectLR(MenuArg_rec& MenuArgLeft,MenuArg_rec& MenuArgRight,vector<std::string> Option, int ListMin, int ListMax);

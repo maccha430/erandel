@@ -73,8 +73,7 @@ void TextClass::LoadStory(){
 			//char型配列のTmpBufをStringオブジェクトのTmpTextに変換
 			TmpText = TmpBuf;
 				
-			//TmpTextの一文字目が'\0'ならば空行と判断しスキップ
-			if( TmpText[0] == NULL ) continue;
+			//TmpTextの一文字目が'\0'ならば空行と判断しスキップ			if( TmpText[0] == NULL ) continue;
 
 			//全角･半角スペースを除去
 		    //CutSpace(TmpText);
@@ -471,7 +470,7 @@ void TextClass::WriteText(UserClass &User){
 	char WriteText[3];								//書き込み文字
 
 	//定数定義	
-	const int DrawX		= 250;							//描画基準Ｘ座標						
+	const int DrawX		= 150;							//描画基準Ｘ座標						
 	const int DrawY		= windowY - windowY / 3 + 50;	//描画基準Ｙ座標
 	const int TextSpace = 14;							//文字と文字の間隔
 	const int LineSpace = 40;							//行と行の間隔
@@ -540,7 +539,7 @@ void TextClass::WriteText(UserClass &User){
 /*名前描画*/
 void TextClass::WriteName(){
 	//定数定義
-	const int DrawX = 200;
+	const int DrawX = 100;
 	const int DrawY = windowY - windowY / 3 + 10;
 
 	//Nameが主人公なら、空文字を代入(地の文なので名前を表示させない)
@@ -744,32 +743,68 @@ void TextClass::AutoFunction(UserClass &User){
  void TextClass::SelectWrite(UserClass& User,int OptionNumber)
  {
 	 enum { DIALOG, ENTER};
-
+	 enum{LEFT,RIGHT};
 	 SE.SetVol(User);
+	 const int AtherSelect = -1;
 	 //メニューパラメータセット
-	 static struct MenuArg_rec SelectParam;
-	 if (SelectFlag == 0)
-	 {	 
-		 SetMenuParam_Select(SelectParam, Option[OptionNumber][0], OptionCount[OptionNumber]);
-		 SE.PlayMusic(DIALOG);
-		 SelectFlag = 1;
-	 }
-	 static SelectMenuClass GameSelectMenu(SelectParam);
-	 GameSelectMenu.Create();
-
-	 MouseClass* Mouse = MouseClass::GetInstance();
-	 Selected = GameSelectMenu.GetSelectNo();
-	 if (Mouse->GetState(MOUSE::LEFT) == TRUE) {
-		 if (Selected != 10)
-		 { 
-			 SceneCount = stoi(Option[OptionNumber][1][Selected-1]);
-			 SE.PlayMusic(ENTER);
-			 TextCount = 0;
-			 SerifCount = 0;
-			 SelectFlag = 0;
-			 WriteMode = NORMAL;
+	 if (OptionCount[OptionNumber] <= 4)
+	 {
+		 static struct MenuArg_rec SelectParam;
+		 if (SelectFlag == 0)
+		 {
+			 SetMenuParam_Select(SelectParam, Option[OptionNumber][0], 0,OptionCount[OptionNumber]);
+			 SE.PlayMusic(DIALOG);
+			 SelectFlag = 1;
+		 }
+		 SelectMenuClass GameSelectMenu(SelectParam);
+		 GameSelectMenu.Create();
+		 MouseClass* Mouse = MouseClass::GetInstance();
+		 Selected = GameSelectMenu.GetSelectNo();
+		 if (Mouse->GetState(MOUSE::LEFT) == TRUE) {
+			 if (Selected != AtherSelect)
+			 {
+				 SceneCount = stoi(Option[OptionNumber][1][Selected]);
+				 SE.PlayMusic(ENTER);
+				 TextCount = 0;
+				 SerifCount = 0;
+				 SelectFlag = 0;
+				 WriteMode = NORMAL;
+			 }
 		 }
 	 }
+	 else
+	 {
+		 static struct MenuArg_rec SelectLeftParam;
+		 static struct MenuArg_rec SelectRightParam;
+		
+		 if (SelectFlag == 0)
+		 {
+			 SetMenuParam_SelectLR(SelectLeftParam,SelectRightParam, Option[OptionNumber][0],0, OptionCount[OptionNumber]);
+			 SE.PlayMusic(DIALOG);
+			 SelectFlag = 1;
+		 }
+		 SelectMenuClass GameSelectLeftMenu(SelectLeftParam);
+		 SelectMenuClass GameSelectRightMenu(SelectRightParam);
+		 GameSelectLeftMenu.Create();
+		 GameSelectRightMenu.Create();
+		 MouseClass* Mouse = MouseClass::GetInstance();
+		 Selected = GameSelectLeftMenu.GetSelectNo();
+		 if (Selected == AtherSelect) Selected = GameSelectRightMenu.GetSelectNo();
+		 if (Mouse->GetState(MOUSE::LEFT) == TRUE) {
+			 if (Selected != AtherSelect)
+			 {
+				 SceneCount = stoi(Option[OptionNumber][1][Selected]);
+				 SE.PlayMusic(ENTER);
+				 TextCount = 0;
+				 SerifCount = 0;
+				 SelectFlag = 0;
+				 WriteMode = NORMAL;
+			 }
+		 }
+	 }
+	 
+
+	 
  }
 
  void TextClass::DiceRoll(UserClass& User, int ReqStatus)
@@ -820,7 +855,7 @@ void TextClass::AutoFunction(UserClass &User){
 		 else {
 			 Counter = 0;
 			 ClickFlag = false;
-			 if (RollResult + 1 <= ReqStatus)
+			 if (RollResult + 1 > ReqStatus)
 			 {
 				 TextCount++;
 				 SerifCount++;
@@ -977,8 +1012,8 @@ void TextClass::OverTime(UserClass &User){
 			SetDrawBright(Count,Count,Count);
 
 			//明るいならカウント下げ、暗いならカウント上げ
-			if( BlackFlag == FALSE ) Count-=5;
-			else					 Count+=5;
+			if( BlackFlag == FALSE ) Count-=1;
+			else					 Count+=1;
 
 			//限界まで達したら各種フラグを立てる
 			if( Count < 0   )		 StopFlag  = TRUE;
@@ -1009,17 +1044,80 @@ void TextClass::OverTime(UserClass &User){
 			}
 		
 		}
+	if (EventCode == "フェードイン") {
+		//画面の明るさを変更
+		if (BlackFlag == false)
+		{
+			Count = 0;
+			BlackFlag = true;
+		}
+		SetDrawBright(Count, Count, Count);
+
+		//カウント上げ
+		Count += 1;
+
+		//限界まで達したら各種フラグを立てる
+		if (Count > 255)     WhiteFlag = TRUE;
+
+		//全ての処理が終わったらなら、各変数初期化
+		if (WhiteFlag == TRUE) {
+			Count = 255;
+			Timer = 0;
+			BlackFlag = FALSE;
+			WhiteFlag = FALSE;
+			StopFlag = FALSE;
+			FirstFlag = FALSE;
+
+			TextCount++;
+			SerifCount++;
+			WriteMode = TmpMode;
+		}
+
+	}
+	if (EventCode == "フェードアウト") {
+
+		//画面の明るさを変更
+		SetDrawBright(Count, Count, Count);
+
+		//明るいならカウント下げ、暗いならカウント上げ
+		if (BlackFlag == FALSE)Count -= 1;
+
+		//限界まで達したら各種フラグを立てる
+		if (Count < 0)		 StopFlag = TRUE;
+
+		//停止フラグが立ってるならタイマー加算
+		if (StopFlag == TRUE) Timer++;
+
+		//30フレーム以上なら
+		if (Timer > 30) {
+			Timer = 0;
+			StopFlag = FALSE;
+			BlackFlag = TRUE;
+		}
+
+		//全ての処理が終わったらなら、各変数初期化
+		if (BlackFlag == TRUE) {
+			Count = 255;
+			Timer = 0;
+			BlackFlag = FALSE;
+			WhiteFlag = FALSE;
+			StopFlag = FALSE;
+			FirstFlag = FALSE;
+
+			TextCount++;
+			SerifCount++;
+			WriteMode = TmpMode;
+		}
+
+	}
 }
+
 
 /*ゲームオーバー*/
 void TextClass::GameEnd(UserClass &User){
 	//定数
 	const int DrawX = 250;
 	const int DrawY = windowY - windowY / 3 + 10;
-	
-
-
-	//DrawStringToHandle(DrawX,DrawY,"ゲームオーバーだじょ、長め左クリックでタイトル戻るよ！",GetColor(0,0,0),TextFontHandle);
 }
 
 /*現在のデータをセット*/
@@ -1066,6 +1164,8 @@ void TextClass::CheckControlCode(UserClass &User){
 	std::string SelectCode;
 	std::string FlagCode;
 	std::string StatusCode;
+	std::string JumpCode;
+	int tmp;
 	bool EventFlag = FALSE;
 
 	do{
@@ -1077,11 +1177,11 @@ void TextClass::CheckControlCode(UserClass &User){
 		if( Name[SceneCount][TextCount] == "音楽" ){
 			//BGMコード受け取り
 			BGMCode = Text[SceneCount][TextCount];
-			if( BGMCode == "回想" )   User.SetBGMCode( GAME_BGM::KAISOU1 );
-			if( BGMCode == "出会い" ) User.SetBGMCode( GAME_BGM::DEAI );
-			if( BGMCode == "別れ" )   User.SetBGMCode( GAME_BGM::WAKARE );
+			if( BGMCode == "バトル" ) User.SetBGMCode( GAME_BGM::BATTLE );
 			if( BGMCode == "無音" )   User.SetBGMCode( GAME_BGM::STOP );
-			if( BGMCode == "残響" )	  User.SetBGMCode( GAME_BGM::TITLE);
+			if( BGMCode == "花火" )	  User.SetBGMCode( GAME_BGM::TITLE);
+			if (BGMCode == "エランデル")User.SetBGMCode(GAME_BGM::ERANDEL);
+			if(BGMCode=="警報")User.SetBGMCode(GAME_BGM::WARNING);
 			TextCount++;
 			SerifCount++;
 			EventFlag = TRUE;
@@ -1093,8 +1193,22 @@ void TextClass::CheckControlCode(UserClass &User){
 			//背景コード受け取り
 			BackCode = Text[SceneCount][TextCount];
 			if( BackCode == "暗闇" ) User.SetBackCode( GAME_BACK::BLACK  );
-			if( BackCode == "川原" ) User.SetBackCode( GAME_BACK::KAWARA );
-			if( BackCode == "夜空" ) User.SetBackCode( GAME_BACK::YOZORA );
+			if( BackCode == "教室" ) User.SetBackCode( GAME_BACK::CLASSROOM );
+			if( BackCode == "廊下" ) User.SetBackCode( GAME_BACK::ROUKA );
+			if (BackCode == "玄関") User.SetBackCode(GAME_BACK::GENKAN);
+			if (BackCode == "職員室前") User.SetBackCode(GAME_BACK::SYOKUIN_MAE);
+			if (BackCode == "職員室") User.SetBackCode(GAME_BACK::SYOKUIN);
+			if (BackCode == "保健室") User.SetBackCode(GAME_BACK::HOKEN);
+			if (BackCode == "理科室") User.SetBackCode(GAME_BACK::RIKA);
+			if (BackCode == "放送室") User.SetBackCode(GAME_BACK::HOUSOU);
+			if (BackCode == "音楽室") User.SetBackCode(GAME_BACK::ONGAKU);
+			if (BackCode == "会議室") User.SetBackCode(GAME_BACK::KAIGI);
+			if (BackCode == "非常階段") User.SetBackCode(GAME_BACK::HIJOUKAIDAN);
+			if (BackCode == "体育館") User.SetBackCode(GAME_BACK::TAIIKUKAN);
+			if (BackCode == "地下室") User.SetBackCode(GAME_BACK::CHIKA);
+			if (BackCode == "トンネル") User.SetBackCode(GAME_BACK::TUNNEL);
+			if (BackCode == "自宅") User.SetBackCode(GAME_BACK::JITAKU);
+			if (BackCode == "黒板") User.SetBackCode(GAME_BACK::KOKUBAN);
 			TextCount++;
 			SerifCount++;
 			EventFlag = TRUE;
@@ -1104,7 +1218,7 @@ void TextClass::CheckControlCode(UserClass &User){
 		if( Name[SceneCount][TextCount] == "キャラ" ){
 			//キャラクタコード受け取り
 			CharacterCode = Text[SceneCount][TextCount];
-			if( CharacterCode == "藍"     ) User.SetCharacterCode( GAME_CHAR::AI );
+			if( CharacterCode == "先生"     ) User.SetCharacterCode( GAME_CHAR::AI );
 			if( CharacterCode == "非表示" )	User.SetCharacterCode( GAME_CHAR::NOT );
 			TextCount++;
 			SerifCount++;
@@ -1115,6 +1229,8 @@ void TextClass::CheckControlCode(UserClass &User){
 		if( Name[SceneCount][TextCount] == "イベント" ){
 			EventCode = Text[SceneCount][TextCount];
 			if( EventCode == "経過"       ) OverTime(User);
+			if (EventCode == "フェードイン") OverTime(User);
+			if (EventCode == "フェードアウト") OverTime(User);
 			if( EventCode == "タイトルへ" ) WriteMode = TITLE;
 		}
 		//シーンチェンジ
@@ -1159,13 +1275,23 @@ void TextClass::CheckControlCode(UserClass &User){
 		//フラグチェック
 		if (Name[SceneCount][TextCount] == "フラグチェック") {
 			FlagCode = Text[SceneCount][TextCount];
-			if (User.CheckFlag(stoi(FlagCode)) == true)
+			if (User.CheckFlag(stoi(FlagCode)) == false)
 			{
 				TextCount++;
 				SerifCount++;
 			}
 			TextCount++;
 			SerifCount++;
+			EventFlag = TRUE;
+		}
+		if (Name[SceneCount][TextCount] == "行スキップ") {
+			JumpCode = Text[SceneCount][TextCount];
+			tmp = (stoi(JumpCode)) + TextCount;
+			for (int i=TextCount;i<=tmp;++i)
+			{
+				if(Name[SceneCount][TextCount]!="続き")SerifCount++;
+				TextCount++;
+			}
 			EventFlag = TRUE;
 		}
 		//判定
@@ -1208,11 +1334,11 @@ void TextClass::BackCheckControlCode(UserClass &User){
 		if( Name[TmpSceneCount][TmpTextCount] == "音楽" && BGMFlag == FALSE){
 			//BGMコード受け取り
 			BGMCode = Text[TmpSceneCount][TmpTextCount];
-			if( BGMCode == "回想" )   User.SetBGMCode( GAME_BGM::KAISOU1 );
-			if( BGMCode == "出会い" ) User.SetBGMCode( GAME_BGM::DEAI );
-			if( BGMCode == "別れ" )   User.SetBGMCode( GAME_BGM::WAKARE );
-			if( BGMCode == "無音" )   User.SetBGMCode( GAME_BGM::STOP );
-			if( BGMCode == "残響" )	  User.SetBGMCode( GAME_BGM::TITLE);
+			if (BGMCode == "バトル") User.SetBGMCode(GAME_BGM::BATTLE);
+			if (BGMCode == "無音")   User.SetBGMCode(GAME_BGM::STOP);
+			if (BGMCode == "花火")	  User.SetBGMCode(GAME_BGM::TITLE);
+			if (BGMCode == "エランデル")User.SetBGMCode(GAME_BGM::ERANDEL);
+			if (BGMCode == "警報")User.SetBGMCode(GAME_BGM::WARNING);
 			BGMFlag = TRUE;
 		}
 	
@@ -1221,7 +1347,23 @@ void TextClass::BackCheckControlCode(UserClass &User){
 			//背景コード受け取り
 			BackCode = Text[TmpSceneCount][TmpTextCount];
 			if( BackCode == "暗闇" ) User.SetBackCode( GAME_BACK::BLACK  );
-			if( BackCode == "川原" ) User.SetBackCode( GAME_BACK::KAWARA );
+			if (BackCode == "暗闇") User.SetBackCode(GAME_BACK::BLACK);
+			if (BackCode == "教室") User.SetBackCode(GAME_BACK::CLASSROOM);
+			if (BackCode == "廊下") User.SetBackCode(GAME_BACK::ROUKA);
+			if (BackCode == "玄関") User.SetBackCode(GAME_BACK::GENKAN);
+			if (BackCode == "職員室前") User.SetBackCode(GAME_BACK::SYOKUIN_MAE);
+			if (BackCode == "職員室") User.SetBackCode(GAME_BACK::SYOKUIN);
+			if (BackCode == "保健室") User.SetBackCode(GAME_BACK::HOKEN);
+			if (BackCode == "理科室") User.SetBackCode(GAME_BACK::RIKA);
+			if (BackCode == "放送室") User.SetBackCode(GAME_BACK::HOUSOU);
+			if (BackCode == "音楽室") User.SetBackCode(GAME_BACK::ONGAKU);
+			if (BackCode == "会議室") User.SetBackCode(GAME_BACK::KAIGI);
+			if (BackCode == "非常階段") User.SetBackCode(GAME_BACK::HIJOUKAIDAN);
+			if (BackCode == "体育館") User.SetBackCode(GAME_BACK::TAIIKUKAN);
+			if (BackCode == "地下室") User.SetBackCode(GAME_BACK::CHIKA);
+			if (BackCode == "トンネル") User.SetBackCode(GAME_BACK::TUNNEL);
+			if (BackCode == "自宅") User.SetBackCode(GAME_BACK::JITAKU);
+			if (BackCode == "黒板") User.SetBackCode(GAME_BACK::KOKUBAN);
 			BackFlag = TRUE;
 		}
 		
@@ -1229,7 +1371,7 @@ void TextClass::BackCheckControlCode(UserClass &User){
 		if( Name[TmpSceneCount][TmpTextCount] == "キャラ"  && CharFlag == FALSE ){
 			//キャラクタコード受け取り
 			CharacterCode = Text[TmpSceneCount][TmpTextCount];
-			if( CharacterCode == "藍"     ) User.SetCharacterCode( GAME_CHAR::AI );
+			if( CharacterCode == "先生"     ) User.SetCharacterCode( GAME_CHAR::AI );
 			if( CharacterCode == "非表示" )	User.SetCharacterCode( GAME_CHAR::NOT );
 			CharFlag = TRUE;
 		}

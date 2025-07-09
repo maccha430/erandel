@@ -4,7 +4,7 @@
 class TextClass{
 	private:
 		//定数
-		enum{SceneMax=8,RowMax=1024};						//シーン最大数、行数最大
+		enum{SceneMax=63,RowMax=1024};						//シーン最大数、行数最大
 		enum{NORMAL,EYECATCH,BACKLOG,NOTWINDOW,CHANGE,END,TITLE,SELECT,DICEROLL}; //描画モード定数
 
 		int  Select;										//選択メニュー

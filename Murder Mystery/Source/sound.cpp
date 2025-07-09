@@ -61,11 +61,11 @@ GameSoundClass::GameSoundClass(){
 /*音楽ロード*/
 void GameSoundClass::Load(){
 	//音楽データロード
-	GameBGM.push_back( LoadSoundMem("./resource/sound/bgm/kaisou.ogg") );
-	GameBGM.push_back( LoadSoundMem("./resource/sound/bgm/kaisou2.ogg") );
-	GameBGM.push_back( LoadSoundMem("./resource/sound/bgm/deai.ogg") );
-	GameBGM.push_back( LoadSoundMem("./resource/sound/bgm/wakare.ogg") );	
+	GameBGM.push_back( LoadSoundMem("./resource/sound/bgm/battle.ogg") );
+	GameBGM.push_back(LoadSoundMem("./resource/sound/bgm/erandel.ogg"));
 	GameBGM.push_back( LoadSoundMem("./resource/sound/bgm/TitleBGM.ogg") );
+	GameBGM.push_back(LoadSoundMem("./resource/sound/bgm/Warning.ogg"));
+	
 }
 
 /*音楽再生*/
@@ -73,12 +73,12 @@ void GameSoundClass::PlayMusic(UserClass &User){
 	static bool KaisouFlag = FALSE;
 
 	//音量設定
-	for( int i=0 ; i<5 ; i++ ) ChangeVolumeSoundMem(BGMVol,GameBGM[i]);
+	for( int i=0 ; i<4 ; i++ ) ChangeVolumeSoundMem(BGMVol,GameBGM[i]);
 
 
 	//曲が変わった
 	if( NowPlayCode != User.GetBGMCode() ){
-		for( int i=0 ; i<5 ; i++ ) StopSoundMem(GameBGM[i]);
+		for( int i=0 ; i<4 ; i++ ) StopSoundMem(GameBGM[i]);
 		NowPlayCode = User.GetBGMCode();
 		PlayFlag    = STOP;
 		KaisouFlag  = FALSE;
@@ -90,31 +90,25 @@ void GameSoundClass::PlayMusic(UserClass &User){
 		PlayFlag = PLAY;	//再生フラグを立てる
 
 		switch( NowPlayCode ){
-			//回想1ループ目
-			case GAME_BGM::KAISOU1:
-				PlaySoundMem(GameBGM[GAME_BGM::KAISOU1],DX_PLAYTYPE_BACK);
-				KaisouFlag = TRUE;
+
+			//戦闘
+			case GAME_BGM::BATTLE:
+				PlaySoundMem(GameBGM[GAME_BGM::BATTLE],DX_PLAYTYPE_LOOP);
 			break;
 
-			//回想2ループ目以降
-			case GAME_BGM::KAISOU2:
-				PlaySoundMem(GameBGM[GAME_BGM::KAISOU2],DX_PLAYTYPE_LOOP);
-			break;
+			//白兎のワルツ
+			case GAME_BGM::ERANDEL:
+				PlaySoundMem(GameBGM[GAME_BGM::ERANDEL], DX_PLAYTYPE_LOOP);
+				break;
 
-			//出会い
-			case GAME_BGM::DEAI:
-				PlaySoundMem(GameBGM[GAME_BGM::DEAI],DX_PLAYTYPE_LOOP);
-			break;
-
-			//別れ
-			case GAME_BGM::WAKARE:
-				PlaySoundMem(GameBGM[GAME_BGM::WAKARE],DX_PLAYTYPE_LOOP);
-			break;
-
-			//残響
+			//夜風の花火
 			case GAME_BGM::TITLE:
 				PlaySoundMem(GameBGM[GAME_BGM::TITLE],DX_PLAYTYPE_LOOP);
 			break;
+			case GAME_BGM::WARNING:
+				PlaySoundMem(GameBGM[GAME_BGM::WARNING], DX_PLAYTYPE_LOOP);
+				break;
+			
 
 			//音楽停止
 			case GAME_BGM::STOP:
@@ -123,17 +117,11 @@ void GameSoundClass::PlayMusic(UserClass &User){
 		}
 	}
 
-	//回想1ループ目が終わったら2ループ目にチェンジ
-	if( NowPlayCode == GAME_BGM::KAISOU1 && CheckSoundMem( GameBGM[GAME_BGM::KAISOU1] ) == 0 && KaisouFlag == TRUE ){
-		PlaySoundMem(GameBGM[GAME_BGM::KAISOU2],DX_PLAYTYPE_LOOP);
-		KaisouFlag = FALSE;
-	}
-
 }
 
 /*音楽停止*/
 void GameSoundClass::StopBGM(){
-	for( int i=0 ; i<5 ; i++ ) StopSoundMem(GameBGM[i]);
+	for( int i=0 ; i<4 ; i++ ) StopSoundMem(GameBGM[i]);
 	PlayFlag = STOP;
 }
 
@@ -189,11 +177,8 @@ SecretSoundClass::SecretSoundClass(){
 /*音楽ロード*/
 void SecretSoundClass::Load(){
 	TitleBGM   = LoadSoundMem("./resource/sound/bgm/TitleBGM.ogg");
-	kaisouBGM  = LoadSoundMem("./resource/sound/bgm/prologue.ogg");
-	kaisou2BGM = LoadSoundMem("./resource/sound/bgm/kaisou2.ogg");
-	DeaiBGM    = LoadSoundMem("./resource/sound/bgm/deai.ogg");
-	WakareBGM  = LoadSoundMem("./resource/sound/bgm/wakare.ogg");
-	EndingBGM  = LoadSoundMem("./resource/sound/bgm/Ending.ogg");
+	ErandelBGM  = LoadSoundMem("./resource/sound/bgm/erandel.ogg");
+	BattleBGM = LoadSoundMem("./resource/sound/bgm/battle.ogg");
 }
 
 /*音楽再生(ダミー)*/
@@ -205,11 +190,8 @@ void SecretSoundClass::PlayMusic(int Code){
 	static bool KaisouFlag = TRUE;
 
 	ChangeVolumeSoundMem(BGMVol,TitleBGM);
-	ChangeVolumeSoundMem(BGMVol,kaisouBGM);
-	ChangeVolumeSoundMem(BGMVol,kaisou2BGM);
-	ChangeVolumeSoundMem(BGMVol,DeaiBGM);
-	ChangeVolumeSoundMem(BGMVol,WakareBGM);
-	ChangeVolumeSoundMem(BGMVol+50,EndingBGM);
+	ChangeVolumeSoundMem(BGMVol,ErandelBGM);
+	ChangeVolumeSoundMem(BGMVol,BattleBGM);
 
 	static int OldCode = -1;
 
@@ -223,10 +205,8 @@ void SecretSoundClass::PlayMusic(int Code){
 	//再生フラグが立っていないならば、音楽再生
 	if( PlayFlag == STOP ){
 		if( Code == TITLE )  PlaySoundMem(TitleBGM,DX_PLAYTYPE_LOOP);
-		if( Code == KAISOU ) PlaySoundMem(kaisouBGM,DX_PLAYTYPE_LOOP);
-		if( Code == DEAI )   PlaySoundMem(DeaiBGM,DX_PLAYTYPE_LOOP);
-		if( Code == WAKARE ) PlaySoundMem(WakareBGM,DX_PLAYTYPE_LOOP);
-		if( Code == ENDING ) PlaySoundMem(EndingBGM,DX_PLAYTYPE_LOOP);
+		if( Code == ERANDEL ) PlaySoundMem(ErandelBGM,DX_PLAYTYPE_LOOP);
+		if( Code == BATTLE )   PlaySoundMem(BattleBGM,DX_PLAYTYPE_LOOP);
 
 		PlayFlag = PLAY;
 	}
@@ -240,9 +220,6 @@ void SecretSoundClass::PlayMusic(int Code){
 /*音楽停止*/
 void SecretSoundClass::StopBGM(){
 	StopSoundMem(TitleBGM);
-	StopSoundMem(kaisouBGM);
-	StopSoundMem(kaisou2BGM);
-	StopSoundMem(DeaiBGM);
-	StopSoundMem(WakareBGM);
-	StopSoundMem(EndingBGM);
+	StopSoundMem(ErandelBGM);
+	StopSoundMem(BattleBGM);
 }

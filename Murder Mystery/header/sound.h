@@ -76,14 +76,11 @@ class SESoundClass : public SoundClass{
  | シークレットサウンドクラス |
   ----------------------------*/
 class SecretSoundClass : public SoundClass{
-	enum{TITLE,KAISOU,DEAI,WAKARE,ENDING};
+	enum{TITLE,ERANDEL,BATTLE};
 	private:
 		int TitleBGM;
-		int kaisouBGM;
-		int kaisou2BGM;
-		int DeaiBGM;
-		int WakareBGM;
-		int EndingBGM;
+		int ErandelBGM;
+		int BattleBGM;
 		
 		void Load();
 

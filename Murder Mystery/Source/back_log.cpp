@@ -108,7 +108,7 @@ int BackLogClass::DrawLog(std::string Name[1024],std::string Text[1024]){
 		//テキストチェック
 		if( Name[DrawTextCount] == "続き"  || Name[DrawTextCount] == "主人公" ) Name[DrawTextCount] = "\0";
 
-		if( Name[DrawTextCount] == "背景" || Name[DrawTextCount] == "キャラ" || Name[DrawTextCount] == "音楽" || Name[DrawTextCount] == "イベント" || Name[DrawTextCount] == "エンド" ){
+		if( Name[DrawTextCount] == "背景" || Name[DrawTextCount] == "キャラ" || Name[DrawTextCount] == "音楽" || Name[DrawTextCount] == "イベント" || Name[DrawTextCount] == "エンド"|| Name[DrawTextCount] =="選択肢"|| Name[DrawTextCount] =="フラグON"|| Name[DrawTextCount] =="フラグOFF" || Name[DrawTextCount] == "フラグチェック" || Name[DrawTextCount] == "判定") {
 			DrawTextCount++;
 			//TmpTextCount++;
 			TmpSerifCount++;
@@ -116,6 +116,19 @@ int BackLogClass::DrawLog(std::string Name[1024],std::string Text[1024]){
 			JumpLoopCount--;
 			continue;
 		}
+		if (Name[DrawTextCount] == "行スキップ")
+		{
+			TmpStr = Text[DrawTextCount];
+			for (int i = 0; i <= (stoi(TmpStr)); ++i)
+			{
+				DrawTextCount++;
+				TmpSerifCount++;
+				EventCount++;
+				JumpLoopCount--;
+			}
+			continue;
+		}
+
 		
 		//イベントコードの高さ
 		EventCodeHeight = LineHeight * EventCount;
